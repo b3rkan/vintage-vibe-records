@@ -7,6 +7,7 @@ $secili_kategori = isset($_GET['kategori']) ? (int)$_GET['kategori'] : 0;
 $mevcut_sayfa = isset($_GET['sayfa']) ? (int)$_GET['sayfa'] : 1;
 $sirala = isset($_GET['sirala']) ? $_GET['sirala'] : 'yeni'; 
 
+
 // 2. Sıralama Mantığı
 switch ($sirala) {
     case 'fiyat_artan': $order_sql = "p.fiyat ASC"; break;
@@ -48,7 +49,7 @@ $url_ek .= "&sirala=" . $sirala;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vintage Vibe | Plak Mağazası</title>
+    <title>Vintage Vibe Records</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -57,12 +58,17 @@ $url_ek .= "&sirala=" . $sirala;
 <body>
 <div class="top-bar-serit">
     <div class="top-bar-icerik">
-        Klasik Rock ve Heavy Metal'in Altın Çağı: Orijinal dönem baskıları ve özenle seçilmiş vintage plaklar.
+         Dönem baskı, yeni baskı özenle seçilmiş ve aradığınız tüm plaklar.
     </div>
 </div>
     <header>
         
-        <div class="logo"><h1>Vintage Vibe Records</h1></div>
+<div class="logo-alani">
+    <h1>
+        <img src="images/image_10.png" alt="Vintage Vibe Maskot" class="logo-maskot">
+        <a href="index.php" class="logo-link">Vintage Vibe Records</a>
+    </h1>
+</div>
         <nav>
             <ul>
                 <li><a href="index.php">Ana Sayfa</a></li>

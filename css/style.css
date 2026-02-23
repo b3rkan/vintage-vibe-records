@@ -863,3 +863,35 @@ header {
 }
 
 .btn-sil:hover { background: #dc2626; }
+
+/* Logo Link Tasarımı */
+.logo-link {
+    text-decoration: none; /* Alt çizgiyi kaldırır */
+    color: #d4af37;        /* Orijinal altın sarısı rengimiz */
+    transition: 0.3s;      /* Üzerine gelince yumuşak bir geçiş sağlar */
+}
+
+.logo-link:hover {
+    color: #f1c40f;        /* Üzerine gelince rengin hafifçe parlamasını sağlar */
+    opacity: 0.8;          /* Veya hafif bir şeffaflık verebilirsin */
+}
+/* --- HEADER LOGO VE MASKOT DÜZENİ --- */
+
+/* h1 etiketini esnek bir kutu (flex container) yapıyoruz */
+.logo-alani h1 {
+    display: flex;           /* İçindekileri yan yana dizer */
+    align-items: center;     /* Dikey olarak ortalar */
+    gap: 15px;               /* Maskot ile yazı arasına boşluk bırakır */
+}
+
+/* Maskot görselinin boyutunu ayarlıyoruz */
+.logo-maskot {
+    height: 60px;            /* Yüksekliği header'a uygun olacak şekilde ayarla */
+    width: auto;             /* Genişlik otomatik orantılansın */
+    transition: 0.3s;        /* Üzerine gelince hareket için geçiş efekti */
+}
+
+/* İsteğe bağlı: Logoya mouse ile gelince maskot hafifçe zıplasın */
+.logo-alani h1:hover .logo-maskot {
+    transform: rotate(-5deg) scale(1.1); /* Hafif sola dön ve büyü */
+}
