@@ -437,74 +437,74 @@ function initializeCategoryFilter() {
         if (productsSection) {
             productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+
+    const bgColor = type === 'success' ? '#ad3107' : type === 'error' ? '#ef4444' : '#3b82f6';
+
+    notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    background: ${bgColor};
+    color: white;
+    border-radius: 6px;
+    z-index: 9999;
+    animation: slideIn 0.3s ease-out;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    font-weight: 500;
+`;
+
+    document.body.appendChild(notification);
+
+    const style = document.createElement('style');
+    style.textContent = `
+    @keyframes slideIn {
+        from {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+    }
+`;
+    if (!document.head.querySelector('style[data-notifications]')) {
+        style.setAttribute('data-notifications', 'true');
+        document.head.appendChild(style);
     }
 
-    function showNotification(message, type = 'info') {
-        const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
-        notification.textContent = message;
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease-out';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
 
-        const bgColor = type === 'success' ? '#ad3107' : type === 'error' ? '#ef4444' : '#3b82f6';
+/* ===================================
+   EXPORT FUNCTIONS
+=================================== */
 
-        notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 20px;
-        background: ${bgColor};
-        color: white;
-        border-radius: 6px;
-        z-index: 9999;
-        animation: slideIn 0.3s ease-out;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        font-weight: 500;
-    `;
+window.VintageVibeRecords = {
+    filterByCategory: filterProductsByCategory,
+    filterBySearch: filterProductsBySearch,
+    sortProducts: sortProducts,
+    subscribeNewsletter: subscribeNewsletter,
+    showNotification: showNotification
+};
 
-        document.body.appendChild(notification);
-
-        const style = document.createElement('style');
-        style.textContent = `
-        @keyframes slideIn {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        @keyframes slideOut {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-        }
-    `;
-        if (!document.head.querySelector('style[data-notifications]')) {
-            style.setAttribute('data-notifications', 'true');
-            document.head.appendChild(style);
-        }
-
-        setTimeout(() => {
-            notification.style.animation = 'slideOut 0.3s ease-out';
-            setTimeout(() => notification.remove(), 300);
-        }, 3000);
-    }
-
-    /* ===================================
-       EXPORT FUNCTIONS
-    =================================== */
-
-    window.VintageVibeRecords = {
-        filterByCategory: filterProductsByCategory,
-        filterBySearch: filterProductsBySearch,
-        sortProducts: sortProducts,
-        subscribeNewsletter: subscribeNewsletter,
-        showNotification: showNotification
-    };
 
