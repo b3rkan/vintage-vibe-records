@@ -3,13 +3,26 @@
    White Theme - Favoriler & Sepet Sistemi
 =================================== */
 
-const FAVORITES_KEY = 'vvr_favorites';
-const CART_KEY = 'vvr_cart';
+// ===== API PATHS =====
+const API_URL = {
+    FAVORITES_TOGGLE: './api/favoriler_toggle.php',
+    CART_ADD: './api/sepet_ekle.php',
+    CART_REMOVE: './api/sepet_sil.php',
+    CART_INFO: './api/sepet_bilgi.php'
+};
 
 document.addEventListener('DOMContentLoaded', function () {
-    loadFavoritesFromStorage();
-    loadCartFromStorage();
-    updateCartBadge();
+    // Sayfa yüklenirken sepet bilgisini al (error handling ile)
+    fetch(API_URL.CART_INFO)
+        .then(r => r.json())
+        .then(data => {
+            if (data && data.success) {
+                updateCartBadge(data.cart_total);
+            }
+        })
+        .catch(error => console.log('Sepet bilgisi yüklenemedi (opsiyonel):', error));
+
+    // Event listeners'ları başlat
     initializeFavorites();
     initializeCart();
     initializeSearch();
@@ -49,49 +62,51 @@ function initializeFavorites() {
 }
 
 function toggleFavorite(productId, btn) {
-    let favorites = JSON.parse(localStorage.getItem(FAVORITES_KEY)) || [];
-
-    if (favorites.includes(productId)) {
-        favorites = favorites.filter(id => id !== productId);
-        btn.classList.remove('active');
-        btn.textContent = '♡';
-        showNotification('Favorilerden çıkarıldı', 'info');
-    } else {
-        favorites.push(productId);
-        btn.classList.add('active');
-        btn.textContent = '♥';
-        showNotification('Favorilere eklendi! ♥', 'success');
+    if (!productId) {
+        console.error('toggleFavorite: Product ID eksik!', productId);
+        showNotification('Ürün ID bulunamadı', 'error');
+        return;
     }
 
-    localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+    console.log('toggleFavorite çağrıldı - Product ID:', productId);
+
+    // AJAX ile sunucuya gönder (JSON format)
+    fetch(API_URL.FAVORITES_TOGGLE, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: productId })
+    })
+        .then(response => {
+            console.log('API Response Status:', response.status);
+            return response.json();
+        })
+        .then(data => {
+            console.log('API Response:', data);
+
+            if (data.success) {
+                if (data.is_favorite) {
+                    btn.classList.add('active');
+                    btn.textContent = '♥';
+                } else {
+                    btn.classList.remove('active');
+                    btn.textContent = '♡';
+                }
+                showNotification(data.message, 'success');
+            } else {
+                showNotification('Hata: ' + (data.message || 'Bilinmeyen hata'), 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Favoriler hatası:', error);
+            showNotification('Hata: Favoriler güncellenemedi', 'error');
+        });
 }
 
-function loadFavoritesFromStorage() {
-    const favorites = JSON.parse(localStorage.getItem(FAVORITES_KEY)) || [];
-
-    // Update product grid favorite buttons
-    const favoriteButtons = document.querySelectorAll('.favorite-btn');
-    favoriteButtons.forEach(btn => {
-        const productId = btn.getAttribute('data-product-id');
-        if (favorites.includes(productId)) {
-            btn.classList.add('active');
-            btn.textContent = '♥';
-        } else {
-            btn.textContent = '♡';
-        }
-    });
-
-    // Update detail page favorite buttons
-    const detayFavButtons = document.querySelectorAll('.favorite-btn-detay');
-    detayFavButtons.forEach(btn => {
-        const productId = btn.getAttribute('data-product-id');
-        if (favorites.includes(productId)) {
-            btn.classList.add('active');
-            btn.textContent = '♥';
-        } else {
-            btn.textContent = '♡';
-        }
-    });
+function loadFavoritesFromServer() {
+    // Sayfada PHP tarafından gelen favori listesi var mı kontrol et
+    // şimdilik bu boş - ama daha sonra sunucudan gelecek
 }
 
 /* ===================================
@@ -108,7 +123,7 @@ function initializeCart() {
         btn.addEventListener('click', function (e) {
             e.preventDefault();
             const productId = this.getAttribute('data-product-id');
-            if (productId) addToCart(productId);
+            if (productId) addToCart(productId, this);
         });
     });
 
@@ -123,29 +138,7 @@ function initializeCart() {
             const productId = new URLSearchParams(url.split('?')[1]).get('id');
 
             if (productId) {
-                // localStorage'dan sil
                 removeFromCart(productId);
-
-                // Badge'i güncelle
-                updateCartBadge();
-
-                // Tablodan satırı kaldır (animasyonla)
-                const row = this.closest('tr');
-                if (row) {
-                    row.style.opacity = '0';
-                    row.style.transition = 'opacity 0.3s ease-out';
-                    setTimeout(() => row.remove(), 300);
-                }
-
-                // Sunucuya AJAX ile bildir
-                fetch('sepet_sil.php?id=' + productId, {
-                    method: 'GET',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                });
-
-                showNotification('Ürün sepetinizden çıkarıldı', 'info');
             }
         });
     });
@@ -159,36 +152,7 @@ function initializeCart() {
             const id = this.querySelector('input[name="id"]').value;
             const button = this.querySelector('button[type="submit"]');
 
-            // AJAX ile sepete ekle
-            fetch('sepete_ekle.php?id=' + id, {
-                method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showNotification('✓ Ürün sepetinize eklenmiştir', 'success');
-
-                        // Server'dan gelen sepet verisini localStorage'a yazıyoruz
-                        if (data.cart) {
-                            localStorage.setItem(CART_KEY, JSON.stringify(data.cart));
-                        }
-
-                        updateCartBadge();
-
-                        // Button'u güncelleştir - tekrar tıklanamayacak
-                        button.textContent = '✓ Ürün Sepetinizde';
-                        button.disabled = true;
-                        button.style.opacity = '0.7';
-                        button.style.cursor = 'not-allowed';
-                    }
-                })
-                .catch(error => {
-                    showNotification('Hata: Sepete eklenemedi', 'error');
-                    console.error('Sepete ekleme hatası:', error);
-                });
+            addToCart(id, button);
         });
     }
 }
@@ -203,56 +167,91 @@ function checkProductInCart() {
 
     if (!productId || !button) return;
 
-    // localStorage'dan kontrol et
-    let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-    const inCart = cart.find(item => String(item.id) === productId);
+    // AJAX ile sunucudan kontrol et (opsiyonel şimdilik)
+    // İleriye dönük: fetch('api/cart_check.php?id=' + productId) çağrısı yapabiliriz
 
-    // Eğer sepette varsa button'u disable et
-    if (inCart) {
-        button.textContent = '✓ Ürün Sepetinizde';
-        button.disabled = true;
-        button.style.opacity = '0.7';
-        button.style.cursor = 'not-allowed';
-    } else if (parseInt(cartForm.getAttribute('data-stock')) === 1) {
-        // Stok 1 kalıştı ise
+    // Şimdilik: stok bilgisine göre bağlı
+    if (parseInt(cartForm.getAttribute('data-stock')) === 1) {
         button.textContent = '📦 Son Ürün - Sepete Ekle';
     }
 }
 
-function addToCart(productId) {
-    let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-    productId = String(productId); // String'e dönüştür
+function addToCart(productId, button = null) {
+    fetch(API_URL.CART_ADD, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: productId })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification(data.message, 'success');
+                updateCartBadge(data.cart_total);
 
-    const existingItem = cart.find(item => String(item.id) === productId);
-    if (existingItem) {
-        existingItem.quantity += 1;
-    } else {
-        cart.push({ id: productId, quantity: 1 });
-    }
-
-    localStorage.setItem(CART_KEY, JSON.stringify(cart));
-    updateCartBadge();
-    showNotification('Sepete eklendi!', 'success');
+                // Button durumunu güncelle (detay sayfası için)
+                if (button && button.type === 'submit') {
+                    button.textContent = '✓ Ürün Sepetinizde';
+                    button.disabled = true;
+                    button.style.opacity = '0.7';
+                    button.style.cursor = 'not-allowed';
+                }
+            } else {
+                showNotification('Hata: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            showNotification('Hata: Sepete eklenemedi', 'error');
+            console.error('Sepete ekleme hatası:', error);
+        });
 }
 
 function removeFromCart(productId) {
-    let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-    productId = String(productId); // String'e dönüştür
-    cart = cart.filter(item => String(item.id) !== productId);
-    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    fetch(API_URL.CART_REMOVE, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: productId })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification(data.message, 'info');
+                updateCartBadge(data.cart_total);
+
+                // Tablodan satırı kaldır (animasyonla)
+                const deleteBtn = document.querySelector(`[onclick*="removeFromCart(${productId})"]`);
+                if (deleteBtn) {
+                    const row = deleteBtn.closest('tr');
+                    if (row) {
+                        row.style.opacity = '0';
+                        row.style.transition = 'opacity 0.3s ease-out';
+                        setTimeout(() => row.remove(), 300);
+                    }
+                }
+            } else {
+                showNotification('Hata: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            showNotification('Hata: Sepetten çıkarılamadı', 'error');
+            console.error('Sepetten silme hatası:', error);
+        });
 }
 
-function loadCartFromStorage() {
-    return JSON.parse(localStorage.getItem(CART_KEY)) || [];
-}
-
-function updateCartBadge() {
-    const cart = loadCartFromStorage();
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-
+function updateCartBadge(totalItems = null) {
     const badge = document.querySelector('.icon-badge');
     if (badge) {
-        badge.textContent = totalItems;
+        if (totalItems !== null) {
+            badge.textContent = totalItems;
+        } else {
+            // Sayfa yüklenirken sunucu session'dan hesapla
+            // Bunun için HTML'de veri attribute'u gömeriz
+            // Şimdilik: 0 (ileriye dönük geliştirme)
+            badge.textContent = '0';
+        }
     }
 }
 
@@ -552,6 +551,10 @@ window.VintageVibeRecords = {
     filterBySearch: filterProductsBySearch,
     sortProducts: sortProducts,
     subscribeNewsletter: subscribeNewsletter,
-    showNotification: showNotification
+    showNotification: showNotification,
+    toggleFavorite: toggleFavorite,
+    addToCart: addToCart,
+    removeFromCart: removeFromCart,
+    updateCartBadge: updateCartBadge
 };
 

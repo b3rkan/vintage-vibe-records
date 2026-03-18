@@ -18,15 +18,14 @@ $password = '';     // XAMPP'ta varsayılan şifre boştur
 try {
     // PDO nesnesini oluşturarak veritabanına bağlanıyoruz (UTF-8 karakter seti ile)
     $db = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
-    
+
     // Hata modunu Exception (İstisna) fırlatacak şekilde ayarlıyoruz
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
+
     // Bağlantı testini yapmak istersen aşağıdaki satırın başındaki yorumu kaldırabilirsin
     // echo "Veritabanı bağlantısı başarılı! Rock 'n' Roll!";
-    
-} catch(PDOException $e) {
+
+} catch (PDOException $e) {
     // Eğer bir hata olursa, try bloğu kırılır ve catch bloğu çalışır
     die("Veritabanı bağlantı hatası: " . $e->getMessage());
 }
-?>
