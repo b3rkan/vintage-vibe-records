@@ -9,7 +9,6 @@
         <strong>Berkan GUMUSDERE</strong>
       </a>
       <br />Developer<br />
-      <br /><sub>Favori deneyimi, search bar, listeleme ergonomisi</sub>
     </td>
     <td align="center" width="50%">
   </tr>
