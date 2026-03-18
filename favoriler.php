@@ -165,6 +165,8 @@ try {
     </div>
 </footer>
 
+<!-- SCRIPT SIRALAMASI: main.js ÖNCE, sonra inline script -->
+<script src="js/main.js?v=<?php echo time(); ?>"></script>
 <script>
 // Serverdan gelen plaklar
 const TUM_PLAKLAR = <?php echo json_encode($tum_plaklar); ?>;
@@ -236,6 +238,7 @@ function initializeFavoritesDisplay() {
 }
 
 function toggleFavoriteFull(productId) {
+    productId = String(productId); // String'e çevir
     let favorites = JSON.parse(localStorage.getItem('vvr_favorites')) || [];
     
     if (favorites.includes(productId)) {
@@ -248,10 +251,6 @@ function toggleFavoriteFull(productId) {
     displayFavorites();
 }
 
-function loadFavoritesFromStorage() {
-    const favorites = JSON.parse(localStorage.getItem('vvr_favorites')) || [];
-}
-
 function updateCartBadge() {
     const cart = JSON.parse(localStorage.getItem('vvr_cart')) || [];
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -261,6 +260,5 @@ function updateCartBadge() {
     }
 }
 </script>
-<script src="js/main.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>
