@@ -8,6 +8,7 @@ const CART_KEY = 'vvr_cart';
 
 document.addEventListener('DOMContentLoaded', function () {
     loadFavoritesFromStorage();
+    loadDetayFavoritesFromStorage(); // Detay sayfası favori durumu yükle
     loadCartFromStorage();
     updateCartBadge();
     initializeFavorites();
@@ -49,6 +50,7 @@ function initializeFavorites() {
 }
 
 function toggleFavorite(productId, btn) {
+    productId = String(productId); // String'e çevir
     let favorites = JSON.parse(localStorage.getItem(FAVORITES_KEY)) || [];
 
     if (favorites.includes(productId)) {
@@ -69,7 +71,19 @@ function loadFavoritesFromStorage() {
     const favoriteButtons = document.querySelectorAll('.favorite-btn');
 
     favoriteButtons.forEach(btn => {
-        const productId = btn.getAttribute('data-product-id');
+        const productId = String(btn.getAttribute('data-product-id')); // String'e çevir
+        if (favorites.includes(productId)) {
+            btn.classList.add('active');
+        }
+    });
+}
+
+function loadDetayFavoritesFromStorage() {
+    const favorites = JSON.parse(localStorage.getItem(FAVORITES_KEY)) || [];
+    const detayFavButtons = document.querySelectorAll('.favorite-btn-detay');
+
+    detayFavButtons.forEach(btn => {
+        const productId = String(btn.getAttribute('data-product-id')); // String'e çevir
         if (favorites.includes(productId)) {
             btn.classList.add('active');
         }
@@ -124,7 +138,7 @@ function initializeCart() {
                         }
                         localStorage.setItem('vvr_cart', JSON.stringify(cart));
                         updateCartBadge();
-                        
+
                         // Button'u güncelleştir - tekrar tıklanamayacak
                         button.textContent = '✓ Ürün Sepetinizde';
                         button.disabled = true;
@@ -147,7 +161,7 @@ function checkProductInCart() {
 
     const productId = cartForm.getAttribute('data-product-id');
     const button = cartForm.querySelector('button[type="submit"]');
-    
+
     if (!productId || !button) return;
 
     // localStorage'dan kontrol et
@@ -493,4 +507,4 @@ function initializeCategoryFilter() {
         subscribeNewsletter: subscribeNewsletter,
         showNotification: showNotification
     };
-    
+

@@ -190,7 +190,7 @@ function displayFavorites() {
     favoritesGrid.innerHTML = '';
     
     favorites.forEach(favoriteId => {
-        const plak = TUM_PLAKLAR.find(p => p.id == favoriteId);
+        const plak = TUM_PLAKLAR.find(p => String(p.id) === String(favoriteId)); // String ile compare
         if (plak) {
             const fiyat = parseFloat(plak.fiyat).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             const resim = plak.kapak_gorseli && plak.kapak_gorseli.length > 0 ? `images/${plak.kapak_gorseli}` : '';
