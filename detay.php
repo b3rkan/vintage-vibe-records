@@ -48,6 +48,23 @@ try {
     
     <!-- Stylesheet -->
     <link rel="stylesheet" href="css/style.css?v=<?php echo time(); ?>">
+    
+    <!-- Session Sepet - localStorage Senkronizasyon -->
+    <script>
+        <?php
+        $cartArray = [];
+        if (!empty($_SESSION['sepet']) && is_array($_SESSION['sepet'])) {
+            foreach ($_SESSION['sepet'] as $productId => $quantity) {
+                $cartArray[] = [
+                    'id' => (string)$productId,
+                    'quantity' => (int)$quantity
+                ];
+            }
+        }
+        ?>
+        const serverCart = <?php echo json_encode($cartArray); ?>;
+        localStorage.setItem('vvr_cart', JSON.stringify(serverCart));
+    </script>
 </head>
 <body class="vvr-theme">
 

@@ -359,7 +359,8 @@ try {
                 <h4>Sosyal Ağlar</h4>
                 <ul>
                     <li><a href="#">📘 Facebook</a></li>
-                    <li><a href="#">📷 Instagram</a></li>
+                    <li><a href="https://www.instagram.com/groovelog/">📷 Instagram</a></li>
+                    <li><a href="https://www.discogs.com/user/berkann">💿 Discogs</a></li>
                     <li><a href="#">🐦 Twitter</a></li>
                 </ul>
             </div>

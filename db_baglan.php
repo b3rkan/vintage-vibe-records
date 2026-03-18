@@ -1,4 +1,14 @@
 <?php
+// Session başlat ve sepet verilerini initialize et
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Sepet dizisi yoksa veya array değilse, initialize et
+if (!isset($_SESSION['sepet']) || !is_array($_SESSION['sepet'])) {
+    $_SESSION['sepet'] = [];
+}
+
 // Veritabanı yapılandırma ayarları
 $host = 'localhost';
 $dbname = 'plak_dukkani_db';

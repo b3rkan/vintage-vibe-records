@@ -123,6 +123,24 @@ try {
     
     <!-- Stylesheet -->
     <link rel="stylesheet" href="css/style.css?v=<?php echo time(); ?>">
+    
+    <!-- Session Sepet - localStorage Senkronizasyon -->
+    <script>
+        // Server'daki session'daki sepet verilerini localStorage'a senkronize et (array format)
+        <?php
+        $cartArray = [];
+        if (!empty($_SESSION['sepet']) && is_array($_SESSION['sepet'])) {
+            foreach ($_SESSION['sepet'] as $productId => $quantity) {
+                $cartArray[] = [
+                    'id' => (string)$productId,
+                    'quantity' => (int)$quantity
+                ];
+            }
+        }
+        ?>
+        const serverCart = <?php echo json_encode($cartArray); ?>;
+        localStorage.setItem('vvr_cart', JSON.stringify(serverCart));
+    </script>
 </head>
 <body class="vvr-theme">
 
@@ -358,7 +376,8 @@ try {
                 <h4>Sosyal Ağlar</h4>
                 <ul>
                     <li><a href="#">📘 Facebook</a></li>
-                    <li><a href="#">📷 Instagram</a></li>
+                    <li><a href="https://www.instagram.com/groovelog/">📷 Instagram</a></li>
+                    <li><a href="https://www.discogs.com/user/berkann">💿 Discogs</a></li>
                     <li><a href="#">🐦 Twitter</a></li>
                 </ul>
             </div>

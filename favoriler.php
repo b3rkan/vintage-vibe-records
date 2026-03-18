@@ -29,6 +29,23 @@ try {
     <!-- Stylesheet -->
     <link rel="stylesheet" href="css/style.css?v=<?php echo time(); ?>">
     
+    <!-- Session Sepet - localStorage Senkronizasyon -->
+    <script>
+        <?php
+        $cartArray = [];
+        if (!empty($_SESSION['sepet']) && is_array($_SESSION['sepet'])) {
+            foreach ($_SESSION['sepet'] as $productId => $quantity) {
+                $cartArray[] = [
+                    'id' => (string)$productId,
+                    'quantity' => (int)$quantity
+                ];
+            }
+        }
+        ?>
+        const serverCart = <?php echo json_encode($cartArray); ?>;
+        localStorage.setItem('vvr_cart', JSON.stringify(serverCart));
+    </script>
+    
     <style>
         .empty-favorites {
             text-align: center;
@@ -165,8 +182,6 @@ try {
     </div>
 </footer>
 
-<!-- SCRIPT SIRALAMASI: main.js ÖNCE, sonra inline script -->
-<script src="js/main.js?v=<?php echo time(); ?>"></script>
 <script>
 // Serverdan gelen plaklar
 const TUM_PLAKLAR = <?php echo json_encode($tum_plaklar); ?>;
@@ -192,7 +207,7 @@ function displayFavorites() {
     favoritesGrid.innerHTML = '';
     
     favorites.forEach(favoriteId => {
-        const plak = TUM_PLAKLAR.find(p => String(p.id) === String(favoriteId)); // String ile compare
+        const plak = TUM_PLAKLAR.find(p => p.id == favoriteId);
         if (plak) {
             const fiyat = parseFloat(plak.fiyat).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             const resim = plak.kapak_gorseli && plak.kapak_gorseli.length > 0 ? `images/${plak.kapak_gorseli}` : '';
@@ -202,7 +217,7 @@ function displayFavorites() {
             card.innerHTML = `
                 <div class="product-image-wrapper">
                     ${resim ? `<img src="${resim}" alt="${plak.baslik}" loading="lazy" class="product-image">` : '<div class="product-image-placeholder">📀 Kapak Yok</div>'}
-                    <button class="favorite-btn active" data-product-id="${plak.id}" title="Favorilerden Çıkar">♡</button>
+                    <button class="favorite-btn active" data-product-id="${plak.id}" title="Favorilerden Çıkar">♥</button>
                     <a href="detay.php?id=${plak.id}" class="product-link-overlay"></a>
                 </div>
                 <div class="product-info">
@@ -238,7 +253,6 @@ function initializeFavoritesDisplay() {
 }
 
 function toggleFavoriteFull(productId) {
-    productId = String(productId); // String'e çevir
     let favorites = JSON.parse(localStorage.getItem('vvr_favorites')) || [];
     
     if (favorites.includes(productId)) {
@@ -251,6 +265,10 @@ function toggleFavoriteFull(productId) {
     displayFavorites();
 }
 
+function loadFavoritesFromStorage() {
+    const favorites = JSON.parse(localStorage.getItem('vvr_favorites')) || [];
+}
+
 function updateCartBadge() {
     const cart = JSON.parse(localStorage.getItem('vvr_cart')) || [];
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -260,5 +278,6 @@ function updateCartBadge() {
     }
 }
 </script>
+<script src="js/main.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>

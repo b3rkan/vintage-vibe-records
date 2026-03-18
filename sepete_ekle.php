@@ -23,10 +23,18 @@ if (isset($_GET['id'])) {
     // AJAX ise JSON döndür
     if ($isAjax) {
         header('Content-Type: application/json');
+        
+        // Session'daki sepeti localStorage formatına çevir
+        $cartArray = [];
+        foreach ($_SESSION['sepet'] as $productId => $quantity) {
+            $cartArray[] = ['id' => (string)$productId, 'quantity' => (int)$quantity];
+        }
+        
         echo json_encode([
             'success' => true,
             'message' => 'Sepete eklendi',
-            'cart_count' => array_sum($_SESSION['sepet'])
+            'cart_count' => array_sum($_SESSION['sepet']),
+            'cart' => $cartArray
         ]);
         exit;
     }
