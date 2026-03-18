@@ -81,6 +81,9 @@ function loadFavoritesFromStorage() {
 =================================== */
 
 function initializeCart() {
+    // Detay sayfası: ürün zaten sepette mi kontrol et
+    checkProductInCart();
+
     // Sepete ekle butonlarını dinle
     const addToCartBtns = document.querySelectorAll('[data-product-id].sepete-ekle-btn, .sepete-ekle-btn[data-product-id]');
     addToCartBtns.forEach(btn => {
@@ -98,6 +101,7 @@ function initializeCart() {
             e.preventDefault();
 
             const id = this.querySelector('input[name="id"]').value;
+            const button = this.querySelector('button[type="submit"]');
 
             // AJAX ile sepete ekle
             fetch('sepete_ekle.php?id=' + id, {
@@ -109,7 +113,7 @@ function initializeCart() {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        showNotification('Sepete eklendi! ✓', 'success');
+                        showNotification('✓ Ürün sepetinize eklenmiştir', 'success');
                         // LocalStorage cart'a da ekle (UI uyumu için)
                         let cart = JSON.parse(localStorage.getItem('vvr_cart')) || [];
                         const existingItem = cart.find(item => item.id === id);
@@ -120,6 +124,12 @@ function initializeCart() {
                         }
                         localStorage.setItem('vvr_cart', JSON.stringify(cart));
                         updateCartBadge();
+                        
+                        // Button'u güncelleştir - tekrar tıklanamayacak
+                        button.textContent = '✓ Ürün Sepetinizde';
+                        button.disabled = true;
+                        button.style.opacity = '0.7';
+                        button.style.cursor = 'not-allowed';
                     }
                 })
                 .catch(error => {
@@ -127,6 +137,32 @@ function initializeCart() {
                     console.error('Sepete ekleme hatası:', error);
                 });
         });
+    }
+}
+
+// Detay sayfası: ürün zaten sepette mi kontrol et
+function checkProductInCart() {
+    const cartForm = document.getElementById('cart-form');
+    if (!cartForm) return;
+
+    const productId = cartForm.getAttribute('data-product-id');
+    const button = cartForm.querySelector('button[type="submit"]');
+    
+    if (!productId || !button) return;
+
+    // localStorage'dan kontrol et
+    let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+    const inCart = cart.find(item => item.id === productId);
+
+    // Eğer sepette varsa button'u disable et
+    if (inCart) {
+        button.textContent = '✓ Ürün Sepetinizde';
+        button.disabled = true;
+        button.style.opacity = '0.7';
+        button.style.cursor = 'not-allowed';
+    } else if (parseInt(cartForm.getAttribute('data-stock')) === 1) {
+        // Stok 1 kalıştı ise
+        button.textContent = '📦 Son Ürün - Sepete Ekle';
     }
 }
 

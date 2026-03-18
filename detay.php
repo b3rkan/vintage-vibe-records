@@ -152,7 +152,7 @@ try {
                     </ul>
 
                     <?php if ((int)$plak['stok'] > 0): ?>
-                        <form id="cart-form" style="display: inline;" action="sepete_ekle.php" method="GET">
+                        <form id="cart-form" style="display: inline;" action="sepete_ekle.php" method="GET" data-product-id="<?php echo (int)$plak['id']; ?>" data-stock="<?php echo (int)$plak['stok']; ?>">
                             <input type="hidden" name="id" value="<?php echo (int)$plak['id']; ?>">
                             <button type="submit" class="sepete-ekle-btn">🛒 Sepete Ekle</button>
                         </form>
