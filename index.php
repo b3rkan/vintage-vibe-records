@@ -148,7 +148,7 @@ try {
             <!-- LOGO -->
             <div class="header-logo">
                 <a href="index.php" class="logo-link">
-                    <span class="logo-text">🎛️ Vintage Vibe Records</span>
+                    <span class="logo-text">Vintage Vibe Records</span>
                 </a>
             </div>
 

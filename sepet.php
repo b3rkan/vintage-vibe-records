@@ -36,7 +36,7 @@ require_once 'db_baglan.php';
         <div class="header-wrapper">
             <div class="header-logo">
                 <a href="index.php" class="logo-link">
-                    <span class="logo-text">🎛️ Vintage Vibe Records</span>
+                    <span class="logo-text">Vintage Vibe Records</span>
                 </a>
             </div>
             <div class="header-search">
