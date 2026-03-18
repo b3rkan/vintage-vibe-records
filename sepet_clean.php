@@ -36,7 +36,7 @@ require_once 'db_baglan.php';
         <div class="header-wrapper">
             <div class="header-logo">
                 <a href="index.php" class="logo-link">
-                    <span class="logo-text">🎛️ Vintage Vibe Records</span>
+                    <span class="logo-text">🎛️ Vintage Vibe</span>
                 </a>
             </div>
             <div class="header-search">
@@ -47,7 +47,7 @@ require_once 'db_baglan.php';
             </div>
             <div class="header-icons">
                 <a href="login.php" class="header-icon" title="Hesabım">👤</a>
-                <a href="favoriler.php" class="header-icon" title="Favorilerim">♡</a>
+                <a href="sepet.php" class="header-icon" title="Favorilerim">♡</a>
                 <a href="sepet.php" class="header-icon" title="Sepetim">
                     🛒
                     <span class="icon-badge">0</span>

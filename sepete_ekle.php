@@ -1,9 +1,12 @@
 <?php
 session_start(); // Session hafızasını başlatıyoruz
 
+// AJAX request kontrolü
+$isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+
 // Eğer URL'den bir ürün ID'si geldiyse
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+    $id = (int)$_GET['id'];
     
     // Eğer daha önce 'sepet' adında bir hafıza dizisi oluşturulmadıysa, boş bir dizi oluştur
     if (!isset($_SESSION['sepet'])) {
@@ -16,9 +19,20 @@ if (isset($_GET['id'])) {
     } else {
         $_SESSION['sepet'][$id] = 1;
     }
+    
+    // AJAX ise JSON döndür
+    if ($isAjax) {
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => true,
+            'message' => 'Sepete eklendi',
+            'cart_count' => array_sum($_SESSION['sepet'])
+        ]);
+        exit;
+    }
 }
 
-// İşlem bitince sepet sayfasına yönlendir
+// Normal request ise sepet sayfasına yönlendir
 header("Location: sepet.php");
 exit;
 ?>

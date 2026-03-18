@@ -148,7 +148,7 @@ try {
             <!-- LOGO -->
             <div class="header-logo">
                 <a href="index.php" class="logo-link">
-                    <span class="logo-text">🎛️ Vintage Vibe Records</span>
+                    <span class="logo-text">🎛️ Vintage Vibe</span>
                 </a>
             </div>
 
@@ -168,7 +168,7 @@ try {
             <!-- ICONS -->
             <div class="header-icons">
                 <a href="login.php" class="header-icon" title="Hesabım">👤</a>
-                <a href="favoriler.php" class="header-icon" title="Favorilerim">♡</a>
+                <a href="sepet.php" class="header-icon" title="Favorilerim">♡</a>
                 <a href="sepet.php" class="header-icon" title="Sepetim">
                     🛒
                     <span class="icon-badge">0</span>
@@ -191,12 +191,8 @@ try {
                     <a href="index.php" class="category-item <?php echo ($secili_kategori == 0 && empty($arama_kelimesi)) ? 'active' : ''; ?>">
                         Tüm Ürünler
                     </a>
-                    <?php foreach($kategoriler as $kat): 
-                        $kat_url = "index.php?kategori=" . $kat['id'];
-                        if (!empty($arama_kelimesi)) $kat_url .= "&arama=" . urlencode($arama_kelimesi);
-                        if ($sirala !== 'yeni') $kat_url .= "&sirala=" . urlencode($sirala);
-                    ?>
-                    <a href="<?php echo $kat_url; ?>" 
+                    <?php foreach($kategoriler as $kat): ?>
+                    <a href="index.php?kategori=<?php echo $kat['id']; ?>" 
                        class="category-item <?php echo ($secili_kategori == $kat['id']) ? 'active' : ''; ?>">
                         <?php echo htmlspecialchars($kat['kategori_adi']); ?>
                     </a>
@@ -277,8 +273,13 @@ try {
                                 <div class="product-image-placeholder">📀 Kapak Yok</div>
                             <?php endif; ?>
                             
-                            <!-- FAVORİLER KALBİ -->
-                            <button class="favorite-btn" data-product-id="<?php echo (int)$plak['id']; ?>" title="Favorilere Ekle">♡</button>
+                            <?php if ((int)$plak['stok'] <= 0): ?>
+                                <div class="product-badge out-of-stock">Tükendi</div>
+                            <?php elseif ((int)$plak['stok'] <= 3): ?>
+                                <div class="product-badge low-stock">Son <?php echo (int)$plak['stok']; ?> Kaldı</div>
+                            <?php elseif ($plak['baski_turu'] == 'Dönem Baskı'): ?>
+                                <div class="product-badge vintage">Dönem Baskı</div>
+                            <?php endif; ?>
 
                             <a href="detay.php?id=<?php echo (int)$plak['id']; ?>" class="product-link-overlay"></a>
                         </div>

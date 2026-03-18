@@ -73,7 +73,7 @@ try {
             <!-- LOGO -->
             <div class="header-logo">
                 <a href="index.php" class="logo-link">
-                    <span class="logo-text">🎛️ Vintage Vibe Records</span>
+                    <span class="logo-text">🎛️ Vintage Vibe</span>
                 </a>
             </div>
 
@@ -88,7 +88,7 @@ try {
             <!-- ICONS -->
             <div class="header-icons">
                 <a href="login.php" class="header-icon" title="Hesabım">👤</a>
-                <a href="favoriler.php" class="header-icon" title="Favorilerim">♡</a>
+                <a href="sepet.php" class="header-icon" title="Favorilerim">♡</a>
                 <a href="sepet.php" class="header-icon" title="Sepetim">
                     🛒
                     <span class="icon-badge">0</span>
@@ -105,7 +105,7 @@ try {
 
         <!-- BACK BUTTON -->
         <div style="margin-bottom: 30px;">
-            <a href="index.php" style="color: var(--primary-accent); text-decoration: none; font-weight: 600; transition: var(--transition);" onmouseover="this.style.color='#8b2605'" onmouseout="this.style.color='var(--primary-accent)'">← Vitrine Dön</a>
+            <a href="index.php" style="color: var(--primary-gold); text-decoration: none; font-weight: 600;">← Vitrine Dön</a>
         </div>
 
         <!-- DETAIL SECTION -->
@@ -123,12 +123,9 @@ try {
 
                 <!-- RIGHT: DETAILS -->
                 <div class="detay-sag">
-                    <div style="display: flex; justify-content: space-between; align-items: start;">
-                        <div>
-                            <h2><?php echo htmlspecialchars($plak['baslik']); ?></h2>
-                            <h3><?php echo htmlspecialchars($plak['sanatci']); ?></h3>
-                        </div>
-                        <button class="favorite-btn-detay" data-product-id="<?php echo (int)$plak['id']; ?>" title="Favorilere Ekle">♡</button>
+                    <div>
+                        <h2><?php echo htmlspecialchars($plak['baslik']); ?></h2>
+                        <h3><?php echo htmlspecialchars($plak['sanatci']); ?></h3>
                     </div>
 
                     <p class="fiyat-kocaman"><?php echo $fiyat; ?> ₺</p>
@@ -152,10 +149,7 @@ try {
                     </ul>
 
                     <?php if ((int)$plak['stok'] > 0): ?>
-                        <form id="cart-form" style="display: inline;" action="sepete_ekle.php" method="GET">
-                            <input type="hidden" name="id" value="<?php echo (int)$plak['id']; ?>">
-                            <button type="submit" class="sepete-ekle-btn">🛒 Sepete Ekle</button>
-                        </form>
+                        <a href="sepete_ekle.php?id=<?php echo (int)$plak['id']; ?>" class="sepete-ekle-btn">🛒 Sepete Ekle</a>
                     <?php else: ?>
                         <button class="sepete-ekle-btn" disabled style="opacity: 0.6; cursor: not-allowed;">Stokta Yok</button>
                     <?php endif; ?>

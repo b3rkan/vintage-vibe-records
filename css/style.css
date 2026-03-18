@@ -1,189 +1,1137 @@
-/* --- MODERN & PREMIUM VINTAGE TEMA --- */
+/* ===================================
+   VINTAGE VIBE RECORDS - PREMIUM THEME
+   OnlyJapanVinyl Inspired Design
+=================================== */
 
 :root {
-    --bg-dark: #0f0f11;         /* Çok derin, zengin bir siyah */
-    --surface-dark: #18181b;    /* Kartlar ve formlar için yüzey rengi */
-    --surface-light: #27272a;   /* Hover durumları için biraz daha açık */
-    --primary-gold: #d4af37;    /* Klasik altın sarısı */
-    --gold-hover: #b8962e;
-    --text-main: #f4f4f5;
-    --text-muted: #a1a1aa;
-    --border-color: #3f3f46;
+    --bg-light: #ffffff;
+    --bg-gray: #f8f8f8;
+    --bg-gray-dark: #f0f0f0;
+    --surface-white: #ffffff;
+    --surface-light: #f5f5f5;
+    --primary-accent: #ad3107;
+    --accent-hover: #8b2605;
+    --accent-light: #d4512b;
+    --text-main: #1a1a1a;
+    --text-muted: #666666;
+    --border-color: #e0e0e0;
     --danger: #ef4444;
-    --danger-hover: #dc2626;
     --info: #3b82f6;
-    --info-hover: #2563eb;
-    --transition: all 0.3s ease;
+    --gold: #d4af37;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
 }
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: var(--bg-dark);
+    background-color: var(--bg-light);
     color: var(--text-main);
-    margin: 0;
-    padding: 0;
     line-height: 1.6;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: 'Playfair Display', serif;
-    font-weight: 600;
-    letter-spacing: 0.5px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
 }
 
-/* --- HEADER & NAVİGASYON --- */
-header {
-    background-color: rgba(15, 15, 17, 0.95);
-    padding: 20px 50px;
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ===================================
+   CONTAINER & UTILITIES
+=================================== */
+
+.vvr-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ===================================
+   TOP BAR
+=================================== */
+
+.vvr-topbar {
+    background-color: var(--primary-accent);
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 0;
+    font-size: 0.85em;
+}
+
+.vvr-topbar .vvr-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    backdrop-filter: blur(10px); /* Arka planı hafif flu yapar */
 }
 
-header h1 {
-    color: var(--primary-gold);
-    margin: 0;
-    font-size: 1.8em;
+.topbar-left .topbar-text {
+    color: #ffffff;
 }
 
-nav ul {
-    list-style: none;
+.topbar-right {
     display: flex;
-    gap: 30px;
-    margin: 0;
-    padding: 0;
+    gap: 15px;
+    align-items: center;
 }
 
-nav a {
-    color: var(--text-main);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.95em;
+.topbar-link {
+    color: #ffffff;
     transition: var(--transition);
 }
 
-nav a:hover {
+.topbar-link:hover {
+    color: var(--bg-light);
+}
+
+.divider {
+    color: var(--border-color);
+}
+
+/* ===================================
+   HEADER
+=================================== */
+
+.vvr-header {
+    background-color: var(--surface-white);
+    border-bottom: 2px solid var(--primary-accent);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.98);
+}
+
+.header-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    justify-content: space-between;
+}
+
+/* LOGO */
+.header-logo {
+    flex: 0 0 auto;
+    min-width: 200px;
+}
+
+.logo-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: var(--transition);
+}
+
+.logo-link:hover {
+    transform: scale(1.02);
+}
+
+.logo-img {
+    height: 45px;
+    width: auto;
+}
+
+.logo-text {
+    font-size: 1.2em;
+    font-weight: 700;
     color: var(--primary-gold);
+    white-space: nowrap;
 }
 
-/* --- ANA SAYFA HERO ALANI --- */
-.hero {
-    text-align: center;
-    padding: 80px 20px;
-    background: linear-gradient(to bottom, #1a1a1e, var(--bg-dark));
-    border-bottom: 1px solid #222;
+/* SEARCH BAR */
+.header-search {
+    flex: 1;
+    max-width: 600px;
 }
 
-.hero h2 {
-    font-size: 2.5em;
+.search-form {
+    display: flex;
+    align-items: center;
+    background: var(--surface-light);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0 15px;
+    transition: var(--transition);
+}
+
+.search-form:focus-within {
+    border-color: var(--primary-gold);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+}
+
+.search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-main);
+    padding: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9em;
+}
+
+.search-input::placeholder {
+    color: var(--text-muted);
+}
+
+.search-btn {
+    background: none;
+    border: none;
+    color: var(--primary-accent);
+    cursor: pointer;
+    font-size: 1.1em;
+    padding: 5px;
+    transition: var(--transition);
+}
+
+.search-btn:hover {
+    color: var(--accent-hover);
+}
+
+/* HEADER ICONS */
+.header-icons {
+    display: flex;
+    gap: 20px;
+    flex: 0 0 auto;
+}
+
+.header-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3em;
+    transition: var(--transition);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+.header-icon:hover {
+    color: var(--primary-accent);
+    background-color: var(--bg-gray);
+}
+
+.icon-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--primary-accent);
+    color: white;
+    font-size: 0.65em;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(173, 49, 7, 0.3);
+}
+
+
+/* ===================================
+   NAVBAR (CATEGORIES & FILTERS)
+=================================== */
+
+.vvr-navbar {
+    background-color: var(--bg-gray);
+    border-bottom: 1px solid var(--border-color);
+    padding: 15px 0;
+}
+
+.navbar-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.categories-menu {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+.categories-label {
+    font-weight: 600;
+    color: var(--text-main);
+    white-space: nowrap;
+    font-size: 0.9em;
+}
+
+.categories-list {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+.categories-list::-webkit-scrollbar {
+    height: 3px;
+}
+
+.categories-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.categories-list::-webkit-scrollbar-thumb {
+    background: var(--primary-accent);
+    border-radius: 2px;
+}
+
+.category-item {
+    white-space: nowrap;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: var(--surface-light);
+    color: var(--text-muted);
+    transition: var(--transition);
+    font-size: 0.85em;
+    cursor: pointer;
+}
+
+.category-item:hover {
+    background: var(--bg-light);
+    color: var(--text-main);
+    border: 1px solid var(--primary-accent);
+}
+
+.category-item.active {
+    background: var(--primary-accent);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* SORT SECTION */
+.navbar-controls {
+    flex: 0 0 auto;
+}
+
+.sort-form {
+    display: flex;
+    align-items: center;
+}
+
+.sort-select {
+    padding: 8px 15px;
+    background: var(--surface-white);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.sort-select:hover {
+    border-color: var(--primary-accent);
+    background: var(--bg-gray);
+}
+
+.sort-select:focus {
+    outline: none;
+    border-color: var(--primary-accent);
+    box-shadow: 0 0 10px rgba(173, 49, 7, 0.1);
+}
+
+/* ===================================
+   MAIN CONTENT
+=================================== */
+
+.vvr-main {
+    padding: 60px 0;
+    min-height: calc(100vh - 400px);
+}
+
+.products-section {
+    margin-bottom: 60px;
+}
+
+.products-header {
+    margin-bottom: 40px;
+}
+
+.products-title {
+    font-size: 2em;
     margin-bottom: 10px;
     color: var(--text-main);
 }
 
-.hero p {
+.products-count {
     color: var(--text-muted);
-    font-size: 1.1em;
-    max-width: 600px;
-    margin: 0 auto;
+    font-size: 0.95em;
 }
 
-/* --- PLAK VİTRİNİ & KARTLAR --- */
-.plak-vitrini {
-    padding: 60px 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
+/* ===================================
+   PRODUCT GRID
+=================================== */
 
-.plak-vitrini h3 {
-    text-align: center;
-    font-size: 2em;
-    margin-bottom: 40px;
-    color: var(--primary-gold);
-}
-
-.grid-container {
+.products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 25px;
+    margin-bottom: 50px;
 }
 
-.plak-kart {
-    background-color: var(--surface-dark);
-    padding: 20px;
+/* PRODUCT CARD */
+.product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--surface-white);
     border: 1px solid var(--border-color);
-    border-radius: 12px; /* Daha yumuşak köşeler */
-    text-align: left;
+    border-radius: 8px;
+    overflow: hidden;
     transition: var(--transition);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
 }
 
-.plak-kart:hover {
-    transform: translateY(-8px); /* Üzerine gelince hafifçe yukarı kalkar */
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.6);
-    border-color: #555;
+.product-card:hover {
+    border-color: var(--primary-accent);
+    box-shadow: 0 8px 25px rgba(173, 49, 7, 0.1);
+    transform: translateY(-5px);
 }
 
-.plak-kapak img {
-    width: 100%;          /* Kartın genişliğine göre boyutlanır */
-    height: auto;         /* Oranını korur */
-    max-width: 300px;     /* EN ÖNEMLİ KISIM: Genişliği 300px ile sınırla */
-    max-height: 300px;    /* İstersen yüksekliği de sınırlayabilirsin */
-    object-fit: cover;    /* Görseli kutuya sığdırırken kırpar, bozulmayı önler */
-    border-radius: 6px;
-    margin-bottom: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+/* PRODUCT IMAGE */
+.product-image-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    background: var(--bg-darker);
+    overflow: hidden;
+}
+
+.product-image,
+.product-image-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     transition: var(--transition);
 }
 
-.plak-kart h4 {
-    margin: 0 0 5px 0;
-    font-size: 1.3em;
-}
-
-.plak-kart p strong {
-    color: var(--primary-gold);
-    font-weight: 500;
-}
-
-.fiyat {
-    display: block;
-    color: var(--text-main);
-    font-weight: 600;
-    font-size: 1.3em;
-    margin-top: 15px;
-    border-top: 1px solid var(--border-color);
-    padding-top: 10px;
-}
-
-/* Görsel Olmayan Plaklar İçin Şık Yedek Kutu */
-.gorsel-yok {
-    background-color: #1f1f22;
-    aspect-ratio: 1 / 1;
+.product-image-placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px dashed var(--border-color);
     color: var(--text-muted);
-    margin-bottom: 15px;
-    border-radius: 6px;
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
+    font-size: 0.9em;
 }
 
-/* --- FORMLAR (ADMİN & LOGIN) --- */
-.admin-form-alani, .login-container {
-    max-width: 500px;
-    margin: 60px auto;
-    background-color: var(--surface-dark);
-    padding: 40px;
-    border-radius: 12px;
+.product-card:hover .product-image {
+    transform: scale(1.05);
+}
+
+.product-link-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+/* PRODUCT BADGE */
+.product-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.75em;
+    font-weight: 600;
+    z-index: 20;
+    text-transform: uppercase;
+}
+
+.product-badge.vintage {
+    background: var(--primary-gold);
+    color: var(--bg-dark);
+}
+
+.product-badge.low-stock {
+    background: #ff791a;
+    color: white;
+}
+
+.product-badge.out-of-stock {
+    background: var(--danger);
+    color: white;
+}
+
+/* PRODUCT INFO */
+.product-info {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.product-category {
+    color: var(--text-muted);
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+
+.product-title {
+    font-size: 1em;
+    font-weight: 600;
+    margin-bottom: 6px;
+    line-height: 1.4;
+    color: var(--text-main);
+}
+
+.product-artist {
+    color: var(--primary-accent);
+    font-size: 0.9em;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.product-year {
+    color: var(--text-muted);
+    font-size: 0.8em;
+    margin-bottom: auto;
+}
+
+.product-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+}
+
+.product-price {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: var(--primary-accent);
+}
+
+.product-view-btn {
+    background: var(--primary-accent);
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    font-weight: 600;
+    transition: var(--transition);
+    cursor: pointer;
+    display: inline-block;
+}
+
+.product-view-btn:hover {
+    background: var(--accent-hover);
+    transform: scale(1.05);
+}
+
+/* FAVORILER KALBİ */
+.favorite-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    z-index: 25;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.favorite-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(173, 49, 7, 0.2);
+}
+
+.favorite-btn.active {
+    background: var(--primary-accent);
+    color: #ffd700;
+}
+
+/* DETAY SAYFASI FAVORİ BUTONU */
+.favorite-btn-detay {
+    background: none;
+    border: 2px solid var(--primary-accent);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    color: var(--primary-accent);
+}
+
+.favorite-btn-detay:hover {
+    background: rgba(173, 49, 7, 0.1);
+    transform: scale(1.1);
+}
+
+.favorite-btn-detay.active {
+    background: var(--primary-accent);
+    color: #ffd700;
+    border-color: var(--primary-accent);
+}
+
+.no-products {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+}
+
+/* ===================================
+   PAGINATION
+=================================== */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 50px 0;
+}
+
+.page-link {
+    padding: 8px 12px;
+    background: var(--surface-light);
+    color: var(--text-main);
     border: 1px solid var(--border-color);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    border-radius: 4px;
+    transition: var(--transition);
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.page-link:hover {
+    border-color: var(--primary-gold);
+    color: var(--primary-gold);
+}
+
+.page-link.active {
+    background: var(--primary-gold);
+    color: var(--bg-dark);
+    border-color: var(--primary-gold);
+    font-weight: 600;
+}
+
+/* ===================================
+   NEWSLETTER SECTION
+=================================== */
+
+.newsletter-section {
+    background: linear-gradient(135deg, var(--surface-dark) 0%, var(--surface-light) 100%);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 50px 30px;
+    margin: 60px 0;
+    text-align: center;
+}
+
+.newsletter-content h3 {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+    color: var(--primary-gold);
+}
+
+.newsletter-content p {
+    color: var(--text-muted);
+    margin-bottom: 25px;
+    font-size: 1.05em;
+}
+
+.newsletter-form {
+    display: flex;
+    gap: 10px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.newsletter-form input {
+    flex: 1;
+    padding: 12px 16px;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    border-radius: 4px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9em;
+}
+
+.newsletter-form input::placeholder {
+    color: var(--text-muted);
+}
+
+.newsletter-form input:focus {
+    outline: none;
+    border-color: var(--primary-gold);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
+}
+
+.newsletter-btn {
+    padding: 12px 30px;
+    background: var(--primary-gold);
+    color: var(--bg-dark);
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.newsletter-btn:hover {
+    background: var(--gold-hover);
+    transform: scale(1.02);
+}
+
+/* ===================================
+   FOOTER
+=================================== */
+
+.vvr-footer {
+    background: var(--surface-light);
+    border-top: 2px solid var(--primary-accent);
+    padding: 50px 0 20px;
+    margin-top: 60px;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+    margin-bottom: 30px;
+}
+
+.footer-section h4 {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    color: var(--primary-accent);
+}
+
+.footer-section ul {
+    list-style: none;
+}
+
+.footer-section a {
+    display: block;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    transition: var(--transition);
+    font-size: 0.9em;
+}
+
+.footer-section a:hover {
+    color: var(--primary-accent);
+    padding-left: 5px;
+}
+
+.social-link {
+    display: inline-block;
+}
+
+.footer-bottom {
+    border-top: 1px solid var(--border-color);
+    padding-top: 20px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85em;
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+=================================== */
+
+@media (max-width: 768px) {
+    .header-wrapper {
+        gap: 15px;
+    }
+
+    .logo-text {
+        font-size: 1em;
+    }
+
+    .header-search {
+        max-width: none;
+    }
+
+    .navbar-wrapper {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .categories-menu {
+        width: 100%;
+    }
+
+    .categories-list {
+        width: 100%;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 15px;
+    }
+
+    .products-title {
+        font-size: 1.5em;
+    }
+
+    .newsletter-form {
+        flex-direction: column;
+    }
+
+    .newsletter-btn {
+        width: 100%;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .topbar-right {
+        gap: 10px;
+        font-size: 0.75em;
+    }
+
+    .sort-select {
+        font-size: 0.8em;
+        padding: 6px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .vvr-container {
+        padding: 0 12px;
+    }
+
+    .header-wrapper {
+        gap: 8px;
+    }
+
+    .logo-img {
+        height: 35px;
+    }
+
+    .logo-text {
+        display: none;
+    }
+
+    .header-search {
+        max-width: none;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .products-title {
+        font-size: 1.3em;
+    }
+
+    .vvr-topbar .vvr-container {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .newsletter-section {
+        padding: 30px 15px;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+}
+
+/* ===================================
+   ANIMATIONS
+=================================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.product-card {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* ===================================
+   ACCESSIBILITY
+=================================== */
+
+:focus-visible {
+    outline: 2px solid var(--primary-gold);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ===================================
+   DETAY SAYFASI (PRODUCT DETAIL)
+=================================== */
+
+.detay-main {
+    padding: 40px 0;
+    min-height: calc(100vh - 400px);
+}
+
+.detay-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.detay-sol {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.detay-sol img {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.1);
+}
+
+.gorsel-yok {
+    background: var(--surface-dark);
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 1.2em;
+}
+
+.detay-sag {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.detay-sag h2 {
+    font-size: 2em;
+    color: var(--text-main);
+    margin-bottom: 10px;
+}
+
+.detay-sag h3 {
+    font-size: 1.3em;
+    color: var(--primary-accent);
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.detay-sag h3:hover {
+    color: #8b2605;
+    transform: translateX(5px);
+}
+
+.fiyat-kocaman {
+    font-size: 2.5em;
+    font-weight: 700;
+    color: var(--primary-accent);
+    margin: 20px 0;
+    padding: 20px 0;
+    border-top: 1px solid var(--primary-accent);
+    border-bottom: 1px solid var(--primary-accent);
+}
+
+.ozellikler {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ozellikler li {
+    padding: 12px;
+    background: var(--surface-light);
+    border-radius: 6px;
+    border-left: 3px solid var(--primary-accent);
+    color: var(--text-main);
+}
+
+.ozellikler strong {
+    color: var(--primary-accent);
+}
+
+.sepete-ekle-btn {
+    background: var(--primary-accent);
+    color: white;
+    border: none;
+    padding: 18px 40px;
+    font-size: 1.2em;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(173, 49, 7, 0.2);
+}
+
+.sepete-ekle-btn:hover {
+    background: #8b2605;
+    transform: scale(1.08);
+    box-shadow: 0 12px 30px rgba(173, 49, 7, 0.4);
+}
+
+/* ===================================
+   ADMIN & TABLO STILLERI
+=================================== */
+
+.admin-liste-alani {
+    padding: 40px 0;
+}
+
+.admin-tablo {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface-dark);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.admin-tablo thead {
+    background: var(--surface-light);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.admin-tablo th {
+    padding: 15px;
+    text-align: left;
+    color: var(--primary-gold);
+    font-weight: 600;
+}
+
+.admin-tablo td {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-main);
+}
+
+.admin-tablo tbody tr:hover {
+    background: var(--surface-light);
+    transition: var(--transition);
+}
+
+.btn-sil {
+    background: var(--danger);
+    color: white;
+    padding: 6px 15px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.85em;
+    transition: var(--transition);
+    display: inline-block;
+}
+
+.btn-sil:hover {
+    background: #dc2626;
+    transform: scale(1.05);
+}
+
+.btn-guncelle {
+    background: var(--primary-gold);
+    color: var(--bg-dark);
+    padding: 12px 25px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+    display: inline-block;
+    cursor: pointer;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1em;
+}
+
+.btn-guncelle:hover {
+    background: var(--gold-hover);
+    transform: scale(1.05);
+}
+
+/* ===== LOGIN FORM ===== */
+.login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    background: var(--surface-dark);
+    padding: 40px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.login-container h2 {
+    text-align: center;
+    color: var(--primary-gold);
+    margin-bottom: 30px;
+    font-size: 1.8em;
 }
 
 .form-grup {
@@ -193,705 +1141,54 @@ nav a:hover {
 .form-grup label {
     display: block;
     margin-bottom: 8px;
-    color: var(--text-muted);
-    font-size: 0.9em;
-    font-weight: 500;
-}
-
-.form-grup input, .form-grup select {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid var(--border-color);
-    background-color: var(--bg-dark);
     color: var(--text-main);
-    border-radius: 6px;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-    transition: var(--transition);
-}
-
-.form-grup input:focus, .form-grup select:focus {
-    outline: none;
-    border-color: var(--primary-gold);
-    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2); /* Şık odaklanma efekti */
-}
-
-.gonder-btn {
-    width: 100%;
-    padding: 14px;
-    background-color: var(--primary-gold);
-    color: var(--bg-dark);
-    border: none;
-    font-weight: 600;
-    font-size: 1em;
-    cursor: pointer;
-    border-radius: 6px;
-    margin-top: 10px;
-    font-family: 'Poppins', sans-serif;
-    transition: var(--transition);
-}
-
-.gonder-btn:hover {
-    background-color: var(--gold-hover);
-    transform: translateY(-2px);
-}
-
-/* --- ADMİN TABLOSU --- */
-.admin-liste-alani {
-    max-width: 900px;
-    margin: 40px auto;
-    background-color: var(--surface-dark);
-    padding: 30px;
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    overflow-x: auto; /* Mobilde tablo taşmasını engeller */
-}
-
-.admin-tablo {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.admin-tablo th, .admin-tablo td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.admin-tablo th {
-    background-color: var(--bg-dark);
-    color: var(--primary-gold);
     font-weight: 500;
-    font-size: 0.95em;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
-.admin-tablo tr {
-    transition: var(--transition);
-}
-
-.admin-tablo tr:hover {
-    background-color: var(--surface-light); /* Satırın üzerine gelince vurgulama */
-}
-
-/* Tablo Butonları */
-.admin-tablo td:last-child {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.btn-guncelle, .btn-sil {
-    padding: 8px 14px;
-    text-decoration: none;
-    border-radius: 6px;
-    font-size: 0.85em;
-    font-weight: 500;
-    white-space: nowrap;
-    transition: var(--transition);
-}
-
-.btn-guncelle {
-    background-color: rgba(59, 130, 246, 0.1);
-    color: var(--info);
-    border: 1px solid var(--info);
-}
-
-.btn-guncelle:hover {
-    background-color: var(--info);
-    color: white;
-}
-
-.btn-sil {
-    background-color: rgba(239, 68, 68, 0.1);
-    color: var(--danger);
-    border: 1px solid var(--danger);
-}
-
-.btn-sil:hover {
-    background-color: var(--danger);
-    color: white;
-}
-
-/* --- MESAJLAR & FOOTER --- */
-.basari-mesaji, .hata-mesaji {
+.form-grup input {
+    width: 100%;
     padding: 12px;
-    border-radius: 6px;
-    text-align: center;
-    margin-bottom: 20px;
-    font-weight: 500;
-}
-
-.basari-mesaji {
-    background-color: rgba(34, 197, 94, 0.1);
-    color: #4ade80;
-    border: 1px solid #22c55e;
-}
-
-footer {
-    text-align: center;
-    padding: 30px 20px;
-    background-color: var(--bg-dark);
-    color: var(--text-muted);
-    border-top: 1px solid var(--border-color);
-    margin-top: 60px;
-    font-size: 0.9em;
-}
-
-/* --- ARAMA ÇUBUĞU STİLLERİ --- */
-.arama-alani {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.arama-alani form {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    max-width: 600px;
-    width: 100%;
-    gap: 10px;
-}
-
-.arama-alani input {
-    flex-grow: 1;
-    padding: 12px 20px;
-    border-radius: 30px; /* Oval görünüm */
+    background: var(--bg-dark);
     border: 1px solid var(--border-color);
-    background-color: var(--surface-dark);
     color: var(--text-main);
+    border-radius: 4px;
     font-family: 'Poppins', sans-serif;
-    font-size: 1em;
     transition: var(--transition);
 }
 
-.arama-alani input:focus {
+.form-grup input:focus {
     outline: none;
     border-color: var(--primary-gold);
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
-    background-color: var(--bg-dark);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
 }
 
-.arama-alani button {
-    padding: 12px 30px;
-    border-radius: 30px; /* Oval görünüm */
-    background-color: var(--primary-gold);
-    color: var(--bg-dark);
-    border: none;
-    font-weight: 600;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1em;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.arama-alani button:hover {
-    background-color: var(--gold-hover);
-    transform: scale(1.05); /* Üzerine gelince çok hafif büyür */
-}
-
-.temizle-btn {
-    padding: 12px 20px;
-    color: var(--text-muted);
-    text-decoration: none;
-    font-size: 0.9em;
-    transition: var(--transition);
-}
-
-.temizle-btn:hover {
-    color: var(--danger);
-}
-/* --- KATEGORİ FİLTRELEME MENÜSÜ --- */
-.kategori-menusu {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap; /* Ekrana sığmazsa alt satıra geçmesini sağlar */
-    gap: 15px;
-    margin-bottom: 40px;
-}
-
-.kategori-menusu a {
-    padding: 8px 20px;
-    background-color: var(--surface-dark);
-    color: var(--text-main);
-    text-decoration: none;
-    border: 1px solid var(--border-color);
-    border-radius: 30px; /* Oval kapsül görünümü */
-    font-size: 0.95em;
-    font-weight: 500;
-    transition: var(--transition);
-}
-
-.kategori-menusu a:hover {
-    border-color: var(--primary-gold);
-    color: var(--primary-gold);
-}
-
-/* Seçili olan kategori butonunun altın rengi yanmasını sağlar */
-.kategori-menusu a.aktif {
-    background-color: var(--primary-gold);
-    color: var(--bg-dark);
-    border-color: var(--primary-gold);
-    font-weight: 600;
-}
-
-/* --- ANA SAYFA KART İÇİ İNCELE BUTONU --- */
-.btn-incele {
-    display: block;
-    text-align: center;
-    margin-top: 15px;
-    padding: 10px;
-    background-color: transparent;
-    color: var(--primary-gold);
-    border: 1px solid var(--primary-gold);
-    border-radius: 6px;
-    text-decoration: none;
-    transition: var(--transition);
-    font-weight: 500;
-}
-
-.btn-incele:hover {
-    background-color: var(--primary-gold);
-    color: var(--bg-dark);
-}
-
-/* --- ÜRÜN DETAY SAYFASI STİLLERİ --- */
-.detay-main {
-    padding: 60px 20px;
-}
-
-.detay-container {
-    display: flex;
-    max-width: 1000px;
-    margin: 0 auto;
-    background-color: var(--surface-dark);
-    border-radius: 12px;
-    overflow: hidden; /* İçeriklerin köşelerden taşmasını engeller */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-
-.detay-sol {
-    flex: 1; /* Sol ve sağ alanın eşit genişlikte olmasını sağlar */
-    padding: 40px;
-}
-
-.detay-sol img {
-    width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-}
-
-.detay-sag {
-    flex: 1;
-    padding: 40px;
-    background-color: var(--surface-light); /* Sağ tarafı biraz daha açık renk yapar */
+.plak-form {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    gap: 15px;
 }
 
-.detay-sag h2 {
-    margin: 0;
-    color: var(--primary-gold);
-    font-size: 2.5em;
-    line-height: 1.2;
-}
-
-.detay-sag h3 {
-    margin: 10px 0 20px 0;
-    color: var(--text-main);
-    font-size: 1.5em;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 400;
-}
-
-.fiyat-kocaman {
-    font-size: 2em;
-    font-weight: 600;
-    color: var(--text-main);
-    margin-bottom: 30px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 20px;
-}
-
-.ozellikler {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 30px;
-}
-
-.ozellikler li {
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--text-muted);
-}
-
-.ozellikler li strong {
-    color: var(--text-main);
-    display: inline-block;
-    width: 130px; /* Özellik başlıklarını hizalar */
-}
-
-.sepete-ekle-btn {
-    padding: 15px;
-    background-color: var(--primary-gold);
+.plak-form button {
+    background: var(--primary-gold);
     color: var(--bg-dark);
     border: none;
-    border-radius: 6px;
-    font-size: 1.1em;
+    padding: 12px;
+    border-radius: 4px;
     font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
-    font-family: 'Poppins', sans-serif;
+    font-size: 1em;
 }
 
-.sepete-ekle-btn:hover {
-    background-color: var(--gold-hover);
-    transform: translateY(-2px);
+.plak-form button:hover {
+    background: var(--gold-hover);
 }
 
-/* Mobilde detay sayfasını alt alta dizmek için */
-@media (max-width: 768px) {
-    .detay-container {
-        flex-direction: column;
-    }
-}
-
-/* --- SAYFALAMA (PAGINATION) STİLLERİ --- */
-.sayfalama-alani {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-top: 50px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border-color);
-}
-
-.sayfa-btn {
-    display: inline-block;
-    padding: 8px 16px;
-    background-color: var(--surface-dark);
-    color: var(--text-main);
-    text-decoration: none;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 500;
-    transition: var(--transition);
-}
-
-.sayfa-btn:hover {
-    background-color: var(--surface-light);
-    border-color: var(--primary-gold);
-    color: var(--primary-gold);
-}
-
-/* Bulunulan sayfanın butonunu altın sarısı yapar */
-.sayfa-btn.aktif {
-    background-color: var(--primary-gold);
-    color: var(--bg-dark);
-    border-color: var(--primary-gold);
-    font-weight: 600;
-}
-
-/* --- ÜRÜN ETİKETLERİ (BADGE) STİLLERİ --- */
-
-/* Resim kabını etiketlerin hizalanması için relative yapıyoruz */
-.plak-kapak {
-    position: relative; 
-    overflow: hidden;
-    border-radius: 6px;
-}
-
-.badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    padding: 5px 12px;
-    font-size: 0.75em;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-radius: 4px;
-    z-index: 10;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-    pointer-events: none; /* Mouse ile etkileşimi engeller, resme tıklanabilir */
-}
-
-/* Dönem Baskı Etiketi (Altın/Siyah) */
-.badge-donem {
-    background-color: var(--primary-gold);
-    color: var(--bg-dark);
-}
-
-/* Tükendi Etiketi (Kırmızı/Beyaz) */
-.badge-tukendi {
-    background-color: var(--danger);
-    color: white;
-}
-/* --- SIRALAMA SELECT STİLLERİ --- */
-.siralama-select {
-    padding: 11px 20px;
-    border-radius: 30px;
-    background-color: var(--surface-dark);
-    color: var(--text-main);
-    border: 1px solid var(--border-color);
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.9em;
-    cursor: pointer;
-    transition: var(--transition);
-    outline: none;
-    margin-left: 10px;
-}
-
-.siralama-select:hover {
-    border-color: var(--primary-gold);
-}
-
-.siralama-select option {
-    background-color: var(--bg-dark);
-    color: var(--text-main);
-}
-
-/* Mobilde formun düzenli durması için */
-@media (max-width: 768px) {
-    .arama-alani form {
-        flex-direction: column;
-        gap: 15px;
-    }
-    .siralama-select {
-        margin-left: 0;
-        width: 100%;
-    }
-}
-
-/* Ana taşıyıcı görselin sol üstüne yapışır */
-.badge-konumlandirici {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    display: flex;
-    flex-direction: column; /* Etiketleri ALT ALTA dizer */
-    gap: 6px;               /* Etiketler arasına boşluk koyar */
-    z-index: 50;            /* Resmin her zaman önünde kalmasını sağlar */
-    align-items: flex-start;
-}
-
-/* Tekil etiket ayarları - Artık position:absolute olmamalı! */
-.badge {
-    position: relative !important; /* Önceki absolute komutunu geçersiz kılar */
-    top: 0 !important;
-    left: 0 !important;
-    padding: 6px 12px;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    border-radius: 4px;
-    white-space: nowrap;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    display: block;
-    width: fit-content;
-}
-
-/* Renkler */
-.badge-donem { background-color: var(--primary-gold); color: #000; }
-.badge-az-kaldi { background-color: #f59e0b; color: #fff; }
-.badge-tukendi { background-color: var(--danger); color: #fff; }
-
-/* --- ETİKETLERİ DÜZENLİ DİZEN YAPI --- */
-.plak-kapak {
-    position: relative;
-    overflow: hidden;
-}
-
-.badge-konumlandirici {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    display: flex;
-    flex-direction: column; /* Alt alta dizer */
-    gap: 6px;               /* Aralarına boşluk koyar */
-    z-index: 100;
-    align-items: flex-start;
-}
-
-.badge {
-    position: relative !important; /* Eski absolute değerlerini geçersiz kılar */
-    top: 0 !important;
-    left: 0 !important;
-    padding: 5px 10px;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    border-radius: 4px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    white-space: nowrap;
-}
-
-.badge-donem { background-color: var(--primary-gold); color: #000; }
-.badge-az-kaldi { background-color: #f59e0b; color: #fff; }
-.badge-tukendi { background-color: var(--danger); color: #fff; }
-
-/* --- SARI ÜST BİLGİ ŞERİDİ (TOP BAR) --- */
-.top-bar-serit {
-    background-color: var(--primary-gold); /* Sitenin sarı tema rengi */
-    color: var(--bg-dark); /* Koyu renk metin */
-    padding: 10px 20px;
-    text-align: center;
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.9em;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    border-bottom: 2px solid #b8962e; /* Altına hafif bir koyu sarı çizgi */
-}
-
-.top-bar-icerik {
-    max-width: 1200px;
-    margin: 0 auto; /* İçeriği ortalar */
-}
-
-/* Header'ın üstteki şeride yapışması için üst boşluğu sıfırla */
-header {
-    margin-top: 0 !important;
-}
-
-/* --- ADMİN PANELİ TABLO TASARIMI --- */
-.admin-tablo-kapsayici {
-    background: var(--surface-color); /* Koyu gri arka plan */
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    overflow-x: auto;
-}
-
-.admin-tablo {
-    width: 100%;
-    border-collapse: collapse;
-    color: var(--text-main);
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.9em;
-}
-
-.admin-tablo th {
-    background-color: #1a1a1a;
-    color: var(--primary-gold); /* Başlıklar sarı */
-    text-align: left;
-    padding: 15px;
-    border-bottom: 2px solid var(--primary-gold);
-    text-transform: uppercase;
-    font-size: 0.85em;
-    letter-spacing: 1px;
-}
-
-.admin-tablo td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #333;
-    vertical-align: middle;
-}
-
-.admin-tablo tr:hover {
-    background-color: #2a2a2a; /* Satırın üzerine gelince hafif aydınlanma */
-}
-
-/* Görsel Ayarları */
-.admin-tablo-img {
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-    border-radius: 4px;
-    border: 1px solid #444;
-}
-
-.admin-gorsel-yok {
-    width: 40px;
-    height: 40px;
-    background: #333;
-    color: #888;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    font-size: 0.7em;
-}
-
-/* Kategori Etiketi */
-.admin-tur-etiket {
-    background: rgba(212, 175, 55, 0.1); /* Hafif sarı arka plan */
-    color: var(--primary-gold);
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.85em;
-}
-
-.admin-fiyat {
-    font-weight: 600;
-    color: #e0e0e0;
-}
-
-/* Butonlar */
-.admin-islemler {
-    display: flex;
-    gap: 10px;
-}
-
-.btn-guncelle {
-    background: #3b82f6; /* Mavi */
-    color: white;
-    padding: 6px 12px;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: 0.3s;
-}
-
-.btn-guncelle:hover { background: #2563eb; }
-
-.btn-sil {
-    background: #ef4444; /* Kırmızı */
-    color: white;
-    padding: 6px 12px;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: 0.3s;
-}
-
-.btn-sil:hover { background: #dc2626; }
-
-/* Logo Link Tasarımı */
-.logo-link {
-    text-decoration: none; /* Alt çizgiyi kaldırır */
-    color: #d4af37;        /* Orijinal altın sarısı rengimiz */
-    transition: 0.3s;      /* Üzerine gelince yumuşak bir geçiş sağlar */
-}
-
-.logo-link:hover {
-    color: #f1c40f;        /* Üzerine gelince rengin hafifçe parlamasını sağlar */
-    opacity: 0.8;          /* Veya hafif bir şeffaflık verebilirsin */
-}
-/* --- HEADER LOGO VE MASKOT DÜZENİ --- */
-
-/* h1 etiketini esnek bir kutu (flex container) yapıyoruz */
-.logo-alani h1 {
-    display: flex;           /* İçindekileri yan yana dizer */
-    align-items: center;     /* Dikey olarak ortalar */
-    gap: 15px;               /* Maskot ile yazı arasına boşluk bırakır */
-}
-
-/* Maskot görselinin boyutunu ayarlıyoruz */
-.logo-maskot {
-    height: 60px;            /* Yüksekliği header'a uygun olacak şekilde ayarla */
-    width: auto;             /* Genişlik otomatik orantılansın */
-    transition: 0.3s;        /* Üzerine gelince hareket için geçiş efekti */
-}
-
-/* İsteğe bağlı: Logoya mouse ile gelince maskot hafifçe zıplasın */
-.logo-alani h1:hover .logo-maskot {
-    transform: rotate(-5deg) scale(1.1); /* Hafif sola dön ve büyü */
+.hata-mesaji {
+    background: var(--danger) !important;
+    color: white !important;
+    padding: 12px !important;
+    border-radius: 4px !important;
+    margin-bottom: 20px !important;
+    text-align: center !important;
 }
