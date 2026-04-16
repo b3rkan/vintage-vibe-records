@@ -103,9 +103,9 @@ try {
                 <span class="topbar-text">🎵 Vintage Vibe Records - Premium Plak Koleksiyonu</span>
             </div>
             <div class="topbar-right">
-                <a href="#" class="topbar-link">Gümrük Sözleşmesi</a>
+                <a href="page.php?slug=gumruk-sozlesmesi" class="topbar-link">Gümrük Sözleşmesi</a>
                 <span class="divider">|</span>
-                <a href="#" class="topbar-link">İletişim</a>
+                <a href="page.php?slug=hakkimizda" class="topbar-link">Hakkımızda</a>
             </div>
         </div>
     </div>
@@ -201,17 +201,17 @@ try {
                 <div class="footer-section">
                     <h4>Kurumsal</h4>
                     <ul>
-                        <li><a href="#">Hakkımızda</a></li>
-                        <li><a href="#">İletişim</a></li>
-                        <li><a href="#">Blog</a></li>
+                        <li><a href="page.php?slug=hakkimizda">Hakkımızda</a></li>
+                        <li><a href="page.php?slug=sss">Soru Cevap</a></li>
+                        <li><a href="admin_pages.php">Sayfa Yönetimi</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h4>Yardım</h4>
                     <ul>
-                        <li><a href="#">Gümrük Sözleşmesi</a></li>
-                        <li><a href="#">Teslimat & İade</a></li>
-                        <li><a href="#">Gizlilik Politikası</a></li>
+                        <li><a href="page.php?slug=gumruk-sozlesmesi">Gümrük Sözleşmesi</a></li>
+                        <li><a href="page.php?slug=teslimat-iade">Teslimat & İade</a></li>
+                        <li><a href="page.php?slug=gizlilik-politikasi">Gizlilik Politikası</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">

@@ -1,13 +1,6 @@
 <?php
-// Session başlat ve sepet verilerini initialize et
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-// Sepet dizisi yoksa veya array değilse, initialize et
-if (!isset($_SESSION['sepet']) || !is_array($_SESSION['sepet'])) {
-    $_SESSION['sepet'] = [];
-}
+// Session ve ortak durum yardımcılarını başlat
+require_once __DIR__ . '/api/session_helper.php';
 
 // Veritabanı yapılandırma ayarları
 $host = 'localhost';

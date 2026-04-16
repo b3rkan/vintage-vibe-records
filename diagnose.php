@@ -42,7 +42,7 @@ if (!is_dir($images_dir)) {
     $files = scandir($images_dir);
     $image_count = count($files) - 2; // . ve ..
     echo "<div class='success'>✅ images/ klasörü var ($image_count dosya)</div>";
-    
+
     // Veritabanında olmayan resimleri kontrol et
     try {
         $images_in_db = $db->query("SELECT DISTINCT kapak_gorseli FROM plaklar WHERE kapak_gorseli IS NOT NULL AND kapak_gorseli != ''")->fetchAll(PDO::FETCH_COLUMN);
@@ -101,7 +101,7 @@ if (file_exists($css_file)) {
         'vvr-footer' => 'Footer',
         'newsletter-section' => 'Newsletter'
     ];
-    
+
     foreach ($required_classes as $class => $name) {
         if (strpos($css_content, '.' . $class) !== false) {
             echo "<div class='success'>✅ CSS Sınıfı: .$class</div>";
@@ -117,7 +117,7 @@ $index_content = file_get_contents(__DIR__ . '/index.php');
 
 $html_checks = [
     'DOCTYPE html' => 'HTML5',
-    'charset=UTF-8' => 'Karakter Seti',
+    'charset="UTF-8"' => 'Karakter Seti',
     'vvr-header' => 'Header',
     'vvr-navbar' => 'Navigation',
     'products-grid' => 'Ürün Tanesı',
@@ -141,7 +141,7 @@ if (file_exists(__DIR__ . '/js/main.js')) {
         'initializeCategoryFilter' => 'Kategori Filtre',
         'initializeNewsletterForm' => 'Newsletter'
     ];
-    
+
     foreach ($js_functions as $func => $name) {
         if (strpos($js_content, $func) !== false) {
             echo "<div class='success'>✅ Fonksiyon: $func ($name)</div>";
@@ -155,17 +155,18 @@ if (file_exists(__DIR__ . '/js/main.js')) {
 echo "<h2>7. Tema Renkleri Kontrolü</h2>";
 if (file_exists($css_file)) {
     $css_content = file_get_contents($css_file);
-    $colors = [
-        '#0f0f11' => 'Arka Plan',
-        '#d4af37' => 'Gold',
-        '#f4f4f5' => 'Text'
+    $theme_tokens = [
+        '--primary-accent' => 'Primary Accent',
+        '--text-main' => 'Ana Metin',
+        '--border-color' => 'Kenarlık',
+        '--surface-light' => 'Yüzey Rengi'
     ];
-    
-    foreach ($colors as $color => $name) {
-        if (strpos($css_content, $color) !== false) {
-            echo "<div class='success'>✅ Renk: $color ($name)</div>";
+
+    foreach ($theme_tokens as $token => $name) {
+        if (strpos($css_content, $token) !== false) {
+            echo "<div class='success'>✅ Tema Token: $token ($name)</div>";
         } else {
-            $warnings[] = "Renk tanımı eksik: $color ($name)";
+            $warnings[] = "Tema token eksik: $token ($name)";
         }
     }
 }
@@ -179,7 +180,7 @@ try {
         "SELECT COUNT(*) FROM kategoriler" => "Kategori Sayısı",
         "SELECT * FROM plaklar LIMIT 1" => "İlk Ürün"
     ];
-    
+
     foreach ($test_queries as $query => $name) {
         try {
             $result = $db->query($query);
@@ -219,4 +220,3 @@ if (empty($errors) && empty($warnings)) {
 echo "<h3 style='color: #10b981;'>ℹ BİLGİ (" . count($info) . ")</h3>";
 echo "<div class='info'>Tarama Tamamlandı: " . date('Y-m-d H:i:s') . "</div>";
 echo "</div>";
-?>

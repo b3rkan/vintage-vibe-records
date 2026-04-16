@@ -1,46 +1,77 @@
 <?php
-session_start(); // Session hafızasını başlatıyoruz
+require_once 'db_baglan.php';
 
-// AJAX request kontrolü
 $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+$productId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
-// Eğer URL'den bir ürün ID'si geldiyse
-if (isset($_GET['id'])) {
-    $id = (int)$_GET['id'];
-    
-    // Eğer daha önce 'sepet' adında bir hafıza dizisi oluşturulmadıysa, boş bir dizi oluştur
-    if (!isset($_SESSION['sepet'])) {
-        $_SESSION['sepet'] = array();
-    }
-    
-    // Eğer bu plak zaten sepette varsa miktarını 1 artır, yoksa 1 adet olarak sepete ekle
-    if (isset($_SESSION['sepet'][$id])) {
-        $_SESSION['sepet'][$id]++;
-    } else {
-        $_SESSION['sepet'][$id] = 1;
-    }
-    
-    // AJAX ise JSON döndür
+if ($productId <= 0) {
     if ($isAjax) {
-        header('Content-Type: application/json');
-        
-        // Session'daki sepeti localStorage formatına çevir
-        $cartArray = [];
-        foreach ($_SESSION['sepet'] as $productId => $quantity) {
-            $cartArray[] = ['id' => (string)$productId, 'quantity' => (int)$quantity];
-        }
-        
-        echo json_encode([
-            'success' => true,
-            'message' => 'Sepete eklendi',
-            'cart_count' => array_sum($_SESSION['sepet']),
-            'cart' => $cartArray
-        ]);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode(['success' => false, 'message' => 'Ürün ID eksik']);
         exit;
     }
+
+    header('Location: index.php');
+    exit;
 }
 
-// Normal request ise sepet sayfasına yönlendir
-header("Location: sepet.php");
+$stmt = $db->prepare('SELECT id, stok FROM plaklar WHERE id = ?');
+$stmt->execute([$productId]);
+$product = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$product) {
+    if ($isAjax) {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode(['success' => false, 'message' => 'Ürün bulunamadı']);
+        exit;
+    }
+
+    header('Location: index.php');
+    exit;
+}
+
+if ((int)$product['stok'] <= 0) {
+    if ($isAjax) {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode(['success' => false, 'message' => 'Ürün stoğu tükendi']);
+        exit;
+    }
+
+    header('Location: detay.php?id=' . $productId);
+    exit;
+}
+
+$_SESSION['sepet'] = vvr_normalize_cart_items($_SESSION['sepet']);
+
+$found = false;
+foreach ($_SESSION['sepet'] as &$item) {
+    if ((string)($item['id'] ?? '') === (string)$productId) {
+        $item['quantity']++;
+        $found = true;
+        break;
+    }
+}
+unset($item);
+
+if (!$found) {
+    $_SESSION['sepet'][] = [
+        'id' => (string)$productId,
+        'quantity' => 1,
+    ];
+}
+
+$cartTotal = vvr_cart_total($_SESSION['sepet']);
+
+if ($isAjax) {
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode([
+        'success' => true,
+        'message' => '✓ Ürün sepetinize eklendi',
+        'cart_total' => $cartTotal,
+        'cart' => $_SESSION['sepet'],
+    ]);
+    exit;
+}
+
+header('Location: sepet.php');
 exit;
-?>

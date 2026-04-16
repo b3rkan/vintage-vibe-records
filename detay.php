@@ -21,7 +21,7 @@ $id = (int)$_GET['id'];
 // Ürün verisi
 try {
     $sorgu = $db->prepare("
-        SELECT p.id, p.baslik, p.sanatci, p.fiyat, p.kapak_gorseli, p.stok, p.baski_turu, p.cikis_yili, k.kategori_adi 
+        SELECT p.id, p.baslik, p.sanatci, p.format, p.firma, p.kondisyon_kapak, p.kondisyon_plak, p.fiyat, p.kapak_gorseli, p.stok, p.baski_turu, p.cikis_yili, p.kategori_id, k.kategori_adi 
         FROM plaklar p 
         LEFT JOIN kategoriler k ON p.kategori_id = k.id 
         WHERE p.id = ?
@@ -39,6 +39,16 @@ try {
     if (!empty($plak['kapak_gorseli']) && file_exists('images/' . $plak['kapak_gorseli'])) {
         $resim_yolu = 'images/' . htmlspecialchars($plak['kapak_gorseli']);
     }
+
+    $benzer_stmt = $db->prepare("
+        SELECT id, baslik, sanatci, fiyat, kapak_gorseli, cikis_yili 
+        FROM plaklar 
+        WHERE kategori_id = ? AND id != ? 
+        ORDER BY id DESC 
+        LIMIT 4
+    ");
+    $benzer_stmt->execute([(int)$plak['kategori_id'], (int)$plak['id']]);
+    $benzer_urunler = $benzer_stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
     die("Veritabanı Hatası: " . htmlspecialchars($e->getMessage()));
 }
@@ -89,9 +99,9 @@ try {
                 <span class="topbar-text">🎵 Vintage Vibe Records - Premium Plak Koleksiyonu</span>
             </div>
             <div class="topbar-right">
-                <a href="#" class="topbar-link">Gümrük Sözleşmesi</a>
+                <a href="page.php?slug=gumruk-sozlesmesi" class="topbar-link">Gümrük Sözleşmesi</a>
                 <span class="divider">|</span>
-                <a href="#" class="topbar-link">İletişim</a>
+                <a href="page.php?slug=hakkimizda" class="topbar-link">Hakkımızda</a>
             </div>
         </div>
     </div>
@@ -167,7 +177,12 @@ try {
                         <ul class="ozellikler">
                             <li><strong>Kategori:</strong> <?php echo htmlspecialchars($plak['kategori_adi'] ?? 'Diğer'); ?></li>
                             <li><strong>Çıkış Yılı:</strong> <?php echo !empty($plak['cikis_yili']) && $plak['cikis_yili'] != '0000' ? (int)$plak['cikis_yili'] : 'Bilinmiyor'; ?></li>
+                            <li><strong>Format:</strong> <?php echo htmlspecialchars($plak['format'] ?? '-'); ?></li>
+                            <li><strong>Firma/Label:</strong> <?php echo htmlspecialchars($plak['firma'] ?? '-'); ?></li>
                             <li><strong>Baskı Türü:</strong> <?php echo htmlspecialchars($plak['baski_turu'] ?? '-'); ?></li>
+                            <li><strong>Kondisyon/Kapak:</strong> <?php echo htmlspecialchars($plak['kondisyon_kapak'] ?? '-'); ?></li>
+                            <li><strong>Kondisyon/Plak:</strong> <?php echo htmlspecialchars($plak['kondisyon_plak'] ?? '-'); ?></li>
+                            <li><strong>Ürün Kodu:</strong> #VVR-<?php echo str_pad((string)(int)$plak['id'], 5, '0', STR_PAD_LEFT); ?></li>
                             <li>
                                 <strong>Stok Durumu:</strong>
                                 <?php
@@ -195,6 +210,43 @@ try {
                 </div>
             </section>
 
+            <?php if (!empty($benzer_urunler)): ?>
+                <section style="margin-top: 45px;">
+                    <h3 style="margin-bottom: 16px; color: var(--text-main);">İlgili Ürünler</h3>
+                    <div class="products-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px;">
+                        <?php foreach ($benzer_urunler as $urun):
+                            $urun_fiyat = number_format((float)$urun['fiyat'], 2, ',', '.');
+                            $urun_resim = '';
+                            if (!empty($urun['kapak_gorseli']) && file_exists('images/' . $urun['kapak_gorseli'])) {
+                                $urun_resim = 'images/' . htmlspecialchars($urun['kapak_gorseli']);
+                            }
+                        ?>
+                            <article class="product-card">
+                                <div class="product-image-wrapper">
+                                    <?php if ($urun_resim): ?>
+                                        <img src="<?php echo $urun_resim; ?>" alt="<?php echo htmlspecialchars($urun['baslik']); ?>" class="product-image" loading="lazy">
+                                    <?php else: ?>
+                                        <div class="product-image-placeholder">📀 Kapak Yok</div>
+                                    <?php endif; ?>
+                                    <a href="detay.php?id=<?php echo (int)$urun['id']; ?>" class="product-link-overlay"></a>
+                                </div>
+                                <div class="product-info">
+                                    <h4 class="product-title"><?php echo htmlspecialchars($urun['baslik']); ?></h4>
+                                    <p class="product-artist"><?php echo htmlspecialchars($urun['sanatci']); ?></p>
+                                    <?php if (!empty($urun['cikis_yili']) && $urun['cikis_yili'] != '0000'): ?>
+                                        <p class="product-year">📅 <?php echo (int)$urun['cikis_yili']; ?></p>
+                                    <?php endif; ?>
+                                    <div class="product-footer">
+                                        <span class="product-price"><?php echo $urun_fiyat; ?> ₺</span>
+                                        <a href="detay.php?id=<?php echo (int)$urun['id']; ?>" class="product-view-btn">İncele</a>
+                                    </div>
+                                </div>
+                            </article>
+                        <?php endforeach; ?>
+                    </div>
+                </section>
+            <?php endif; ?>
+
         </div>
     </main>
 
@@ -205,17 +257,17 @@ try {
                 <div class="footer-section">
                     <h4>Kurumsal</h4>
                     <ul>
-                        <li><a href="#">Hakkımızda</a></li>
-                        <li><a href="#">İletişim</a></li>
-                        <li><a href="#">Blog</a></li>
+                        <li><a href="page.php?slug=hakkimizda">Hakkımızda</a></li>
+                        <li><a href="page.php?slug=sss">Soru Cevap</a></li>
+                        <li><a href="admin_pages.php">Sayfa Yönetimi</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h4>Yardım</h4>
                     <ul>
-                        <li><a href="#">Gümrük Sözleşmesi</a></li>
-                        <li><a href="#">Teslimat & İade</a></li>
-                        <li><a href="#">Gizlilik Politikası</a></li>
+                        <li><a href="page.php?slug=gumruk-sozlesmesi">Gümrük Sözleşmesi</a></li>
+                        <li><a href="page.php?slug=teslimat-iade">Teslimat & İade</a></li>
+                        <li><a href="page.php?slug=gizlilik-politikasi">Gizlilik Politikası</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">

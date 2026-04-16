@@ -1,21 +1,13 @@
 <?php
 // ===== API: SEPET BİLGİSİ =====
-// Session başlat
-session_start();
 
-// Sepet başlat
-if (!isset($_SESSION['sepet'])) {
-    $_SESSION['sepet'] = [];
-}
+require_once 'session_helper.php';
 
 // JSON header
 header('Content-Type: application/json; charset=utf-8');
 
 // Toplam ürün sayısını hesapla
-$totalItems = 0;
-foreach ($_SESSION['sepet'] as $item) {
-    $totalItems += $item['quantity'];
-}
+$totalItems = vvr_cart_total($_SESSION['sepet']);
 
 echo json_encode([
     'success' => true,

@@ -1,12 +1,7 @@
 <?php
 // ===== API: SEPETTEN SİL =====
-// Session başlat
-session_start();
 
-// Sepet başlat
-if (!isset($_SESSION['sepet'])) {
-    $_SESSION['sepet'] = [];
-}
+require_once 'session_helper.php';
 
 // JSON header
 header('Content-Type: application/json; charset=utf-8');
@@ -29,9 +24,11 @@ if (!$productId) {
 
 $productId = (string)$productId;
 
-// Sepetten kaldır (yeni format için döngü)
+// Sepeti tek bir formata getirip ürünü kaldır
+$_SESSION['sepet'] = vvr_normalize_cart_items($_SESSION['sepet']);
+
 foreach ($_SESSION['sepet'] as $key => $item) {
-    if ((string)$item['id'] === $productId) {
+    if ((string)($item['id'] ?? '') === $productId) {
         unset($_SESSION['sepet'][$key]);
         break;
     }
@@ -41,10 +38,7 @@ foreach ($_SESSION['sepet'] as $key => $item) {
 $_SESSION['sepet'] = array_values($_SESSION['sepet']);
 
 // Toplam ürün sayısını hesapla
-$totalItems = 0;
-foreach ($_SESSION['sepet'] as $item) {
-    $totalItems += $item['quantity'];
-}
+$totalItems = vvr_cart_total($_SESSION['sepet']);
 
 echo json_encode([
     'success' => true,

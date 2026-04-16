@@ -1,12 +1,7 @@
 <?php
 // ===== API: FAVORİLER TOGGLE =====
-// Session ve config başlat
-session_start();
 
-// Favoriler başlat
-if (!isset($_SESSION['favoriler'])) {
-    $_SESSION['favoriler'] = [];
-}
+require_once 'session_helper.php';
 
 // JSON header - session'dan SONRA!
 header('Content-Type: application/json; charset=utf-8');
@@ -35,9 +30,7 @@ try {
     }
 
     // Favoriler arrayini güvenli kıl
-    if (!is_array($_SESSION['favoriler'])) {
-        $_SESSION['favoriler'] = [];
-    }
+    $_SESSION['favoriler'] = vvr_normalize_favorites($_SESSION['favoriler']);
 
     // Favorilerde var mı kontrol et - döngü ile güvenli
     $is_favorite = false;

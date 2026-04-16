@@ -1,15 +1,20 @@
 <?php
-session_start();
+require_once 'api/session_helper.php';
 
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-    // Eğer bu ID sepette varsa, diziden (hafızadan) tamamen sil
-    if (isset($_SESSION['sepet'][$id])) {
-        unset($_SESSION['sepet'][$id]);
+$productId = isset($_GET['id']) ? (string)$_GET['id'] : '';
+
+if ($productId !== '') {
+    $_SESSION['sepet'] = vvr_normalize_cart_items($_SESSION['sepet']);
+
+    foreach ($_SESSION['sepet'] as $key => $item) {
+        if ((string)($item['id'] ?? '') === $productId) {
+            unset($_SESSION['sepet'][$key]);
+            break;
+        }
     }
+
+    $_SESSION['sepet'] = array_values($_SESSION['sepet']);
 }
 
-// Silme işleminden sonra tekrar sepete dön
-header("Location: sepet.php");
+header('Location: sepet.php');
 exit;
-?>

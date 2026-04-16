@@ -83,6 +83,7 @@ if (!isset($_SESSION['sepet'])) {
                     echo "  <a href='index.php' class='btn-guncelle' style='padding: 12px 30px; font-size: 1.1em;'>← Kataloğa Dön</a>";
                     echo "</div>";
                 } else {
+                    $_SESSION['sepet'] = vvr_normalize_cart_items($_SESSION['sepet']);
                     $genel_toplam = 0;
 
                     echo "<table class='admin-tablo' style='width: 100%;'>";
@@ -148,17 +149,17 @@ if (!isset($_SESSION['sepet'])) {
                 <div class="footer-section">
                     <h4>Kurumsal</h4>
                     <ul>
-                        <li><a href="#">Hakkımızda</a></li>
-                        <li><a href="#">İletişim</a></li>
-                        <li><a href="#">Blog</a></li>
+                        <li><a href="page.php?slug=hakkimizda">Hakkımızda</a></li>
+                        <li><a href="page.php?slug=sss">Soru Cevap</a></li>
+                        <li><a href="admin_pages.php">Sayfa Yönetimi</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h4>Yardım</h4>
                     <ul>
-                        <li><a href="#">Gümrük Sözleşmesi</a></li>
-                        <li><a href="#">Teslimat & İade</a></li>
-                        <li><a href="#">Gizlilik Politikası</a></li>
+                        <li><a href="page.php?slug=gumruk-sozlesmesi">Gümrük Sözleşmesi</a></li>
+                        <li><a href="page.php?slug=teslimat-iade">Teslimat & İade</a></li>
+                        <li><a href="page.php?slug=gizlilik-politikasi">Gizlilik Politikası</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
