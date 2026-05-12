@@ -6,7 +6,7 @@ $slug = isset($_GET['slug']) ? trim($_GET['slug']) : 'hakkimizda';
 
 if ($slug === '' || !preg_match('/^[a-z0-9-]+$/', $slug)) {
     http_response_code(400);
-    die('Gecersiz sayfa istegi.');
+    die('Geçersiz sayfa isteği.');
 }
 
 $stmt = $db->prepare('SELECT title, content FROM site_pages WHERE slug = ? AND is_published = 1 LIMIT 1');
@@ -16,8 +16,8 @@ $page = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$page) {
     http_response_code(404);
     $page = [
-        'title' => 'Sayfa Bulunamadi',
-        'content' => 'Istediginiz icerik bulunamadi veya yayin disi.',
+        'title' => 'Sayfa Bulunamadı',
+        'content' => 'İstediğiniz içerik bulunamadı veya yayın dışı.',
     ];
 }
 ?>
@@ -36,7 +36,7 @@ if (!$page) {
     <div class="vvr-topbar">
         <div class="vvr-container">
             <div class="topbar-left"><span class="topbar-text">Vintage Vibe Records</span></div>
-            <div class="topbar-right"><a href="index.php" class="topbar-link">Ana Sayfaya Don</a></div>
+            <div class="topbar-right"><a href="index.php" class="topbar-link">Ana Sayfaya Dön</a></div>
         </div>
     </div>
 
@@ -46,12 +46,12 @@ if (!$page) {
                 <div class="header-logo"><a href="index.php" class="logo-link"><span class="logo-text">Vintage Vibe Records</span></a></div>
                 <div class="header-search">
                     <form action="index.php" method="GET" class="search-form">
-                        <input type="text" name="arama" class="search-input" placeholder="Sanatci, Album...">
+                        <input type="text" name="arama" class="search-input" placeholder="Sanatçı, Albüm...">
                         <button type="submit" class="search-btn">Ara</button>
                     </form>
                 </div>
                 <div class="header-icons">
-                    <a href="login.php" class="header-icon" title="Hesabim">H</a>
+                    <a href="login.php" class="header-icon" title="Hesabım">H</a>
                     <a href="favoriler.php" class="header-icon" title="Favorilerim">F</a>
                     <a href="sepet.php" class="header-icon" title="Sepetim">S</a>
                 </div>
@@ -74,16 +74,16 @@ if (!$page) {
                 <div class="footer-section">
                     <h4>Kurumsal</h4>
                     <ul>
-                        <li><a href="page.php?slug=hakkimizda">Hakkimizda</a></li>
+                        <li><a href="page.php?slug=hakkimizda">Hakkımızda</a></li>
                         <li><a href="page.php?slug=sss">S.S.S.</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Yardim</h4>
+                    <h4>Yardım</h4>
                     <ul>
-                        <li><a href="page.php?slug=gumruk-sozlesmesi">Gumruk Sozlesmesi</a></li>
-                        <li><a href="page.php?slug=teslimat-iade">Teslimat ve Iade</a></li>
-                        <li><a href="page.php?slug=gizlilik-politikasi">Gizlilik Politikasi</a></li>
+                        <li><a href="page.php?slug=gumruk-sozlesmesi">Gümrük Sözleşmesi</a></li>
+                        <li><a href="page.php?slug=teslimat-iade">Teslimat ve İade</a></li>
+                        <li><a href="page.php?slug=gizlilik-politikasi">Gizlilik Politikası</a></li>
                     </ul>
                 </div>
             </div>

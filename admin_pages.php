@@ -24,15 +24,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $allowedSections = ['kurumsal', 'yardim', 'musteri'];
 
     if ($slug === '' || !preg_match('/^[a-z0-9-]+$/', $slug)) {
-        $hata = 'Slug sadece kucuk harf, rakam ve tire icerebilir.';
+        $hata = 'Slug sadece küçük harf, rakam ve tire içerebilir.';
     } elseif ($title === '' || $content === '' || !in_array($section, $allowedSections, true)) {
-        $hata = 'Tum alanlari dogru doldurun.';
+        $hata = 'Tüm alanları doğru doldurun.';
     } else {
         try {
             if ($id > 0) {
                 $stmt = $db->prepare('UPDATE site_pages SET slug = ?, title = ?, section = ?, content = ?, is_published = ? WHERE id = ?');
                 $stmt->execute([$slug, $title, $section, $content, $isPublished, $id]);
-                $mesaj = 'Sayfa guncellendi.';
+                $mesaj = 'Sayfa güncellendi.';
                 $toastMesaj = $mesaj;
             } else {
                 $stmt = $db->prepare('INSERT INTO site_pages (slug, title, section, content, is_published) VALUES (?, ?, ?, ?, ?)');
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $toastMesaj = $mesaj;
             }
         } catch (Exception $e) {
-            $hata = 'Kayit hatasi: ' . $e->getMessage();
+            $hata = 'Kayıt hatası: ' . $e->getMessage();
             $toastMesaj = $hata;
             $toastTip = 'error';
         }
@@ -78,7 +78,7 @@ $pages = $pagesStmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sayfa Yonetimi | Vintage Vibe Records</title>
+    <title>Sayfa Yönetimi | Vintage Vibe Records</title>
     <link rel="stylesheet" href="css/style.css?v=<?php echo time(); ?>">
     <style>
         .admin-pages-grid {
@@ -208,7 +208,7 @@ $pages = $pagesStmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php endif; ?>
 
                 <section class="admin-pages-card">
-                    <h2><?php echo (int)$editPage['id'] > 0 ? 'Sayfa Duzenle' : 'Yeni Sayfa Ekle'; ?></h2>
+                    <h2><?php echo (int)$editPage['id'] > 0 ? 'Sayfa Düzenle' : 'Yeni Sayfa Ekle'; ?></h2>
                     <form method="POST" class="plak-form admin-pages-form-grid">
                         <input type="hidden" name="id" value="<?php echo (int)$editPage['id']; ?>">
 
@@ -218,27 +218,27 @@ $pages = $pagesStmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
 
                         <div class="form-grup">
-                            <label for="title">Baslik</label>
+                            <label for="title">Başlık</label>
                             <input id="title" type="text" name="title" value="<?php echo htmlspecialchars($editPage['title']); ?>" required>
                         </div>
 
                         <div class="form-grup">
-                            <label for="section">Bolum</label>
+                            <label for="section">Bölüm</label>
                             <select id="section" name="section" required>
                                 <option value="kurumsal" <?php echo $editPage['section'] === 'kurumsal' ? 'selected' : ''; ?>>Kurumsal</option>
-                                <option value="yardim" <?php echo $editPage['section'] === 'yardim' ? 'selected' : ''; ?>>Yardim</option>
-                                <option value="musteri" <?php echo $editPage['section'] === 'musteri' ? 'selected' : ''; ?>>Musteri Iliskileri</option>
+                                <option value="yardim" <?php echo $editPage['section'] === 'yardim' ? 'selected' : ''; ?>>Yardım</option>
+                                <option value="musteri" <?php echo $editPage['section'] === 'musteri' ? 'selected' : ''; ?>>Müşteri İlişkileri</option>
                             </select>
                         </div>
 
                         <div class="form-grup full">
-                            <label for="content">Icerik</label>
+                            <label for="content">İçerik</label>
                             <textarea id="content" name="content" rows="8" required style="width: 100%; padding: 12px;"><?php echo htmlspecialchars($editPage['content']); ?></textarea>
                         </div>
 
                         <div class="form-grup full" style="display: flex; align-items: center; gap: 8px;">
                             <input id="is_published" type="checkbox" name="is_published" <?php echo (int)$editPage['is_published'] === 1 ? 'checked' : ''; ?>>
-                            <label for="is_published" style="margin: 0;">Yayinda</label>
+                            <label for="is_published" style="margin: 0;">Yayında</label>
                         </div>
 
                         <button type="submit" class="gonder-btn full">Kaydet</button>
@@ -252,11 +252,11 @@ $pages = $pagesStmt->fetchAll(PDO::FETCH_ASSOC);
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Baslik</th>
+                                    <th>Başlık</th>
                                     <th>Slug</th>
-                                    <th>Bolum</th>
+                                    <th>Bölüm</th>
                                     <th>Durum</th>
-                                    <th>Islem</th>
+                                    <th>İşlem</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -266,8 +266,8 @@ $pages = $pagesStmt->fetchAll(PDO::FETCH_ASSOC);
                                         <td><?php echo htmlspecialchars($page['title']); ?></td>
                                         <td><?php echo htmlspecialchars($page['slug']); ?></td>
                                         <td><?php echo htmlspecialchars($page['section']); ?></td>
-                                        <td><?php echo (int)$page['is_published'] === 1 ? 'Yayinda' : 'Taslak'; ?></td>
-                                        <td><a class="btn-guncelle" href="admin_pages.php?edit=<?php echo (int)$page['id']; ?>">Duzenle</a></td>
+                                        <td><?php echo (int)$page['is_published'] === 1 ? 'Yayında' : 'Taslak'; ?></td>
+                                        <td><a class="btn-guncelle" href="admin_pages.php?edit=<?php echo (int)$page['id']; ?>">Düzenle</a></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
