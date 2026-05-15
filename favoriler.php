@@ -145,13 +145,13 @@ try {
     <!-- ===== MAIN CONTENT ===== -->
     <main class="vvr-main">
         <div class="vvr-container">
-            <h1 style="font-size: 2.5em; margin-bottom: 40px; color: var(--text-main);">❤️ Favorilerim</h1>
+            <h1 class="favorites-title">❤️ Favorilerim</h1>
 
             <!-- FAVORİLER GRID -->
             <div class="products-grid" id="favorites-grid">
                 <?php
                 if (empty($_SESSION['favoriler'])) {
-                    echo '<div class="empty-favorites" style="grid-column: 1/-1; text-align: center;"><h3>Henüz favori plak eklemediniz</h3><p>Beğendiğiniz plakları favorilere ekleyerek kolayca erişebilirsiniz.</p><a href="index.php">← Plak Koleksiyonuna Dön</a></div>';
+                    echo '<div class="empty-favorites favorites-empty"><h3>Henüz favori plak eklemediniz</h3><p>Beğendiğiniz plakları favorilere ekleyerek kolayca erişebilirsiniz.</p><a href="index.php">← Plak Koleksiyonuna Dön</a></div>';
                 } else {
                     // Session favorilerini getir ve göster
                     foreach ($_SESSION['favoriler'] as $favoriteId) {

@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <!-- LOGIN CONTAINER -->
-    <div class="vvr-container" style="display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 200px); padding: 40px 20px;">
+    <div class="vvr-container login-shell">
         <div class="login-container">
             <h2>🔐 Yönetici Girişi</h2>
 

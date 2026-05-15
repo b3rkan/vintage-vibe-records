@@ -312,6 +312,113 @@ try {
         </div>
     </div>
 
+    <!-- ===== HERO ===== -->
+    <section class="vvr-hero">
+        <div class="vvr-container hero-grid">
+            <div class="hero-content reveal">
+                <p class="hero-eyebrow">Yeni sezon seçimleri</p>
+                <h1>Vinyl koleksiyonunu yeniden keşfet</h1>
+                <p class="hero-lead">Nadir baskılar, audiofiller için özel seçimler ve elle derlenen kataloglar.</p>
+                <div class="hero-actions">
+                    <a href="#urunler" class="hero-btn primary">Koleksiyonu keşfet</a>
+                    <a href="index.php?sirala=yeni" class="hero-btn ghost">Yeni gelenler</a>
+                </div>
+                <div class="hero-highlights">
+                    <div class="hero-highlight">
+                        <span>24-48 Saat</span>
+                        <small>Kargo çıkışı</small>
+                    </div>
+                    <div class="hero-highlight">
+                        <span>+1200</span>
+                        <small>Nadir plak</small>
+                    </div>
+                    <div class="hero-highlight">
+                        <span>Premium</span>
+                        <small>Ses kalitesi</small>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual reveal">
+                <div class="hero-video" aria-hidden="true">
+                    <video autoplay muted loop playsinline poster="images/hero-poster.jpg">
+                        <source src="images/hero-reel.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="hero-orbit hero-orbit--a" data-parallax="6"></div>
+                <div class="hero-orbit hero-orbit--b" data-parallax="10"></div>
+                <div class="hero-orbit hero-orbit--c" data-parallax="14"></div>
+                <div class="hero-sleeve"></div>
+                <div class="hero-disc"></div>
+                <div class="hero-stamp">Limited</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="promo-grid vvr-container">
+        <div class="promo-card reveal">
+            <h3>Küratör Seçkisi</h3>
+            <p>Haftanın favori plakları, analog kulaktan ilham alan liste.</p>
+        </div>
+        <div class="promo-card reveal">
+            <h3>Güvenli Paketleme</h3>
+            <p>Vinyl dostu kargo kutuları ve köşe korumaları.</p>
+        </div>
+        <div class="promo-card reveal">
+            <h3>Topluluğa Özel</h3>
+            <p>Yeni baskılar ve indirimlerden ilk siz haberdar olun.</p>
+        </div>
+    </section>
+
+    <section class="carousel-section vvr-container reveal">
+        <div class="carousel-header">
+            <div>
+                <h2>Yeni Gelenler</h2>
+                <p>Son eklenen plaklardan kısa bir tur.</p>
+            </div>
+            <div class="carousel-controls">
+                <button type="button" class="carousel-btn" data-carousel-prev>←</button>
+                <button type="button" class="carousel-btn" data-carousel-next>→</button>
+            </div>
+        </div>
+        <div class="carousel" data-carousel>
+            <div class="carousel-track">
+                <?php if (count($plaklar) > 0): ?>
+                    <?php foreach ($plaklar as $plak):
+                        $fiyat_format = number_format((float)$plak['fiyat'], 2, ',', '.');
+                        $resim = '';
+                        if (!empty($plak['kapak_gorseli'])) {
+                            $path = 'images/' . htmlspecialchars($plak['kapak_gorseli']);
+                            if (file_exists($path)) {
+                                $resim = $path;
+                            }
+                        }
+                    ?>
+                        <div class="product-card">
+                            <div class="product-image-wrapper">
+                                <?php if ($resim): ?>
+                                    <img src="<?php echo $resim; ?>" alt="<?php echo htmlspecialchars($plak['baslik']); ?>" class="product-image" loading="lazy">
+                                <?php else: ?>
+                                    <div class="product-image-placeholder">📀 Kapak Yok</div>
+                                <?php endif; ?>
+                                <a href="detay.php?id=<?php echo (int)$plak['id']; ?>" class="product-link-overlay"></a>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title"><?php echo htmlspecialchars($plak['baslik']); ?></h3>
+                                <p class="product-artist"><?php echo htmlspecialchars($plak['sanatci']); ?></p>
+                                <div class="product-footer">
+                                    <span class="product-price"><?php echo $fiyat_format; ?> ₺</span>
+                                    <a href="detay.php?id=<?php echo (int)$plak['id']; ?>" class="product-view-btn">İncele</a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="no-products">Katalogda ürün bulunamadı.</div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </section>
+
     <div class="vvr-container" style="padding-top: 18px; padding-bottom: 10px;">
         <form method="GET" style="background: var(--surface-light); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; align-items: end;">
             <input type="hidden" name="kategori" value="<?php echo (int)$secili_kategori; ?>">
@@ -371,7 +478,7 @@ try {
         <div class="vvr-container">
 
             <!-- PRODUCTS SECTION -->
-            <section class="products-section">
+            <section class="products-section" id="urunler">
 
                 <!-- BAŞLIK -->
                 <div class="products-header">

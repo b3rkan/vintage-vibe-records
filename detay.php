@@ -20,8 +20,48 @@ $id = (int)$_GET['id'];
 
 // Ürün verisi
 try {
+    $desired_columns = [
+        'id',
+        'baslik',
+        'sanatci',
+        'format',
+        'firma',
+        'label',
+        'edition',
+        'catalog_no',
+        'rpm',
+        'vinyl_weight',
+        'color_variant',
+        'aciklama',
+        'tracklist',
+        'audio_preview_url',
+        'gallery_images',
+        'kondisyon_kapak',
+        'kondisyon_plak',
+        'fiyat',
+        'kapak_gorseli',
+        'stok',
+        'baski_turu',
+        'cikis_yili',
+        'kategori_id'
+    ];
+
+    $column_stmt = $db->query("SHOW COLUMNS FROM plaklar");
+    $existing_columns = array_fill_keys($column_stmt->fetchAll(PDO::FETCH_COLUMN), true);
+    $select_columns = [];
+
+    foreach ($desired_columns as $column) {
+        if (isset($existing_columns[$column])) {
+            $select_columns[] = "p.$column";
+        } else {
+            $select_columns[] = "NULL AS `$column`";
+        }
+    }
+
+    $select_sql = implode(', ', $select_columns);
+
     $sorgu = $db->prepare("
-        SELECT p.id, p.baslik, p.sanatci, p.format, p.firma, p.kondisyon_kapak, p.kondisyon_plak, p.fiyat, p.kapak_gorseli, p.stok, p.baski_turu, p.cikis_yili, p.kategori_id, k.kategori_adi 
+        SELECT $select_sql, k.kategori_adi 
         FROM plaklar p 
         LEFT JOIN kategoriler k ON p.kategori_id = k.id 
         WHERE p.id = ?
@@ -39,6 +79,54 @@ try {
     if (!empty($plak['kapak_gorseli']) && file_exists('images/' . $plak['kapak_gorseli'])) {
         $resim_yolu = 'images/' . htmlspecialchars($plak['kapak_gorseli']);
     }
+
+    $description = trim($plak['aciklama'] ?? '');
+    $tracklist_raw = trim($plak['tracklist'] ?? '');
+    $tracklist_items = array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', $tracklist_raw)));
+    $label = trim($plak['label'] ?? '') !== '' ? $plak['label'] : ($plak['firma'] ?? '');
+    $edition = trim($plak['edition'] ?? '');
+    $catalogNo = trim($plak['catalog_no'] ?? '');
+    $rpm = trim($plak['rpm'] ?? '');
+    $weight = trim($plak['vinyl_weight'] ?? '');
+    $colorVariant = trim($plak['color_variant'] ?? '');
+    $audioPreview = trim($plak['audio_preview_url'] ?? '');
+
+    $gallery_items = [];
+    if ($resim_yolu !== '') {
+        $gallery_items[] = $resim_yolu;
+    }
+
+    $gallery_raw = trim($plak['gallery_images'] ?? '');
+    if ($gallery_raw !== '') {
+        $gallery_parts = array_filter(array_map('trim', explode(',', $gallery_raw)));
+        foreach ($gallery_parts as $item) {
+            if ($item === '') {
+                continue;
+            }
+            if (preg_match('/^https?:\/\//i', $item)) {
+                $path = $item;
+            } else {
+                $path = ltrim($item, '/');
+                if (!file_exists($path)) {
+                    continue;
+                }
+            }
+            if (!in_array($path, $gallery_items, true)) {
+                $gallery_items[] = $path;
+            }
+        }
+    }
+
+    $specs = [
+        'Plak Şirketi' => $label,
+        'Baskı Versiyonu' => $edition,
+        'Katalog No' => $catalogNo,
+        'Devir (RPM)' => $rpm,
+        'Plak Ağırlığı' => $weight,
+        'Renk Varyantı' => $colorVariant,
+        'Format' => $plak['format'] ?? '',
+        'Baskı Türü' => $plak['baski_turu'] ?? ''
+    ];
 
     $benzer_stmt = $db->prepare("
         SELECT id, baslik, sanatci, fiyat, kapak_gorseli, cikis_yili 
@@ -145,31 +233,62 @@ try {
         <div class="vvr-container">
 
             <!-- BACK BUTTON -->
-            <div style="margin-bottom: 30px;">
-                <a href="index.php" style="color: var(--primary-accent); text-decoration: none; font-weight: 600; transition: var(--transition);" onmouseover="this.style.color='#8b2605'" onmouseout="this.style.color='var(--primary-accent)'">← Vitrine Dön</a>
+            <div class="detail-back">
+                <a href="index.php" class="back-link">← Vitrine Dön</a>
             </div>
 
             <!-- DETAIL SECTION -->
             <section class="detay-main">
-                <div class="detay-container">
+                <div class="detay-container reveal">
 
                     <!-- LEFT: IMAGE -->
                     <div class="detay-sol">
-                        <?php if ($resim_yolu): ?>
-                            <img src="<?php echo $resim_yolu; ?>" alt="<?php echo htmlspecialchars($plak['baslik']); ?>" loading="lazy">
-                        <?php else: ?>
-                            <div class="gorsel-yok" style="width: 100%; max-width: 400px; height: 400px;">📀 Kapak Görseli Yok</div>
-                        <?php endif; ?>
+                        <div class="detail-gallery">
+                            <div class="detail-main-image">
+                                <?php if ($resim_yolu): ?>
+                                    <img id="detail-main-image" src="<?php echo $resim_yolu; ?>" alt="<?php echo htmlspecialchars($plak['baslik']); ?>" loading="lazy">
+                                <?php else: ?>
+                                    <div class="gorsel-yok detail-image-placeholder">📀 Kapak Görseli Yok</div>
+                                <?php endif; ?>
+                                <?php if ($resim_yolu): ?>
+                                    <button class="detail-zoom-btn" type="button" aria-label="Kapağı büyüt">🔍</button>
+                                <?php endif; ?>
+                            </div>
+                            <?php if (count($gallery_items) > 1): ?>
+                                <div class="detail-thumbs">
+                                    <?php foreach ($gallery_items as $index => $item): ?>
+                                        <button type="button" class="detail-thumb <?php echo $index === 0 ? 'is-active' : ''; ?>" data-src="<?php echo htmlspecialchars($item); ?>">
+                                            <img src="<?php echo htmlspecialchars($item); ?>" alt="<?php echo htmlspecialchars($plak['baslik']); ?> küçük görsel">
+                                        </button>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
                     </div>
 
                     <!-- RIGHT: DETAILS -->
                     <div class="detay-sag">
-                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div class="detail-top">
                             <div>
                                 <h2><?php echo htmlspecialchars($plak['baslik']); ?></h2>
                                 <h3><?php echo htmlspecialchars($plak['sanatci']); ?></h3>
                             </div>
                             <button class="favorite-btn-detay" data-product-id="<?php echo (int)$plak['id']; ?>" title="Favorilere Ekle">♡</button>
+                        </div>
+
+                        <div class="detail-quick">
+                            <?php if (!empty($plak['format'])): ?>
+                                <span class="detail-chip"><?php echo htmlspecialchars($plak['format']); ?></span>
+                            <?php endif; ?>
+                            <?php if (!empty($plak['baski_turu'])): ?>
+                                <span class="detail-chip"><?php echo htmlspecialchars($plak['baski_turu']); ?></span>
+                            <?php endif; ?>
+                            <?php if (!empty($plak['cikis_yili']) && $plak['cikis_yili'] != '0000'): ?>
+                                <span class="detail-chip"><?php echo (int)$plak['cikis_yili']; ?></span>
+                            <?php endif; ?>
+                            <?php if (!empty($label)): ?>
+                                <span class="detail-chip"><?php echo htmlspecialchars($label); ?></span>
+                            <?php endif; ?>
                         </div>
 
                         <p class="fiyat-kocaman"><?php echo $fiyat; ?> ₺</p>
@@ -187,33 +306,126 @@ try {
                                 <strong>Stok Durumu:</strong>
                                 <?php
                                 if ((int)$plak['stok'] <= 0) {
-                                    echo '<span style="color: var(--danger);">Tükendi</span>';
+                                    echo '<span class="detail-stock detail-stock--out">Tükendi</span>';
                                 } elseif ((int)$plak['stok'] <= 3) {
-                                    echo '<span style="color: #ff791a;">Son ' . (int)$plak['stok'] . ' Adet Kaldı</span>';
+                                    echo '<span class="detail-stock detail-stock--low">Son ' . (int)$plak['stok'] . ' Adet Kaldı</span>';
                                 } else {
-                                    echo '<span style="color: var(--info);">' . (int)$plak['stok'] . ' Adet Mevcut</span>';
+                                    echo '<span class="detail-stock detail-stock--in">' . (int)$plak['stok'] . ' Adet Mevcut</span>';
                                 }
                                 ?>
                             </li>
                         </ul>
 
                         <?php if ((int)$plak['stok'] > 0): ?>
-                            <form id="cart-form" style="display: inline;" action="sepete_ekle.php" method="GET" data-product-id="<?php echo (int)$plak['id']; ?>" data-stock="<?php echo (int)$plak['stok']; ?>">
+                            <form id="cart-form" class="detail-actions" action="sepete_ekle.php" method="GET" data-product-id="<?php echo (int)$plak['id']; ?>" data-stock="<?php echo (int)$plak['stok']; ?>">
                                 <input type="hidden" name="id" value="<?php echo (int)$plak['id']; ?>">
                                 <button type="submit" class="sepete-ekle-btn">🛒 Sepete Ekle</button>
                             </form>
                         <?php else: ?>
-                            <button class="sepete-ekle-btn" disabled style="opacity: 0.6; cursor: not-allowed;">Stokta Yok</button>
+                            <button class="sepete-ekle-btn detail-disabled" disabled>Stokta Yok</button>
                         <?php endif; ?>
+
+                        <div class="detail-tabs">
+                            <button class="detail-tab active" data-tab="overview" type="button">Genel</button>
+                            <button class="detail-tab" data-tab="tracklist" type="button">Parça Listesi</button>
+                            <button class="detail-tab" data-tab="specs" type="button">Teknik</button>
+                            <button class="detail-tab" data-tab="preview" type="button">Dinle</button>
+                        </div>
+
+                        <div class="detail-tab-panels">
+                            <div class="detail-panel active" id="tab-overview">
+                                <h4>Albüm Hakkında</h4>
+                                <?php if ($description !== ''): ?>
+                                    <p><?php echo nl2br(htmlspecialchars($description)); ?></p>
+                                <?php else: ?>
+                                    <div class="detail-empty">Bu albüm için açıklama yakında eklenecek.</div>
+                                <?php endif; ?>
+                                <h4 style="margin-top: 18px;">Teslimat ve İade</h4>
+                                <p>24-48 saat içinde kargoya verilir. Hasarlı teslimatlarda kolay iade desteği sunarız.</p>
+                            </div>
+
+                            <div class="detail-panel" id="tab-tracklist">
+                                <h4>Parça Listesi</h4>
+                                <?php if (!empty($tracklist_items)): ?>
+                                    <ol class="detail-tracklist">
+                                        <?php foreach ($tracklist_items as $track): ?>
+                                            <li><?php echo htmlspecialchars($track); ?></li>
+                                        <?php endforeach; ?>
+                                    </ol>
+                                <?php else: ?>
+                                    <div class="detail-empty">Parça listesi yakında eklenecek.</div>
+                                <?php endif; ?>
+                            </div>
+
+                            <div class="detail-panel" id="tab-specs">
+                                <h4>Teknik Bilgiler</h4>
+                                <ul class="detail-specs">
+                                    <?php foreach ($specs as $labelText => $value): ?>
+                                        <?php if (!empty($value)): ?>
+                                            <li><strong><?php echo htmlspecialchars($labelText); ?>:</strong> <?php echo htmlspecialchars($value); ?></li>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+
+                            <div class="detail-panel" id="tab-preview">
+                                <h4>Ön İzleme</h4>
+                                <?php if ($audioPreview !== ''): ?>
+                                    <div class="audio-player-wrapper" style="display: flex; align-items: center; gap: 20px;">
+                                        <div class="audio-vinyl-spinner" id="audio-vinyl">
+                                            <svg viewBox="0 0 24 24" width="70" height="70" style="fill: transparent;">
+                                                <circle cx="12" cy="12" r="11" stroke="var(--border-color)" stroke-width="0.5" fill="#111" />
+                                                <circle cx="12" cy="12" r="4" fill="var(--primary-accent)" />
+                                                <circle cx="12" cy="12" r="1" fill="#fff" />
+                                                <path d="M12 2 a10 10 0 0 1 10 10" stroke="#333" stroke-width="0.5" fill="none" />
+                                                <path d="M12 4 a8 8 0 0 1 8 8" stroke="#333" stroke-width="0.5" fill="none" />
+                                                <path d="M12 6 a6 6 0 0 1 6 6" stroke="#333" stroke-width="0.5" fill="none" />
+                                            </svg>
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <audio id="vvr-audio" class="detail-audio" controls preload="none" style="width: 100%;">
+                                                <source src="<?php echo htmlspecialchars($audioPreview); ?>">
+                                                Tarayıcınız ses etiketini desteklemiyor.
+                                            </audio>
+                                            <div class="audio-wave" aria-hidden="true">
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        const aud = document.getElementById('vvr-audio');
+                                        const vinyl = document.getElementById('audio-vinyl');
+                                        if (aud && vinyl) {
+                                            aud.addEventListener('play', () => vinyl.classList.add('spinning-vinyl-icon'));
+                                            aud.addEventListener('pause', () => vinyl.classList.remove('spinning-vinyl-icon'));
+                                            aud.addEventListener('ended', () => vinyl.classList.remove('spinning-vinyl-icon'));
+                                        }
+                                    </script>
+                                <?php else: ?>
+                                    <div class="detail-empty">Ön izleme yakında eklenecek.</div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
             </section>
 
             <?php if (!empty($benzer_urunler)): ?>
-                <section style="margin-top: 45px;">
-                    <h3 style="margin-bottom: 16px; color: var(--text-main);">İlgili Ürünler</h3>
-                    <div class="products-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px;">
+                <section class="detail-related reveal">
+                    <h3 class="detail-related-title">İlgili Ürünler</h3>
+                    <div class="detail-related-grid">
                         <?php foreach ($benzer_urunler as $urun):
                             $urun_fiyat = number_format((float)$urun['fiyat'], 2, ',', '.');
                             $urun_resim = '';
@@ -246,6 +458,13 @@ try {
                     </div>
                 </section>
             <?php endif; ?>
+
+            <div class="detail-lightbox" id="detail-lightbox" aria-hidden="true">
+                <div class="detail-lightbox-content">
+                    <button class="detail-lightbox-close" type="button" aria-label="Kapat">×</button>
+                    <img id="detail-lightbox-image" src="" alt="">
+                </div>
+            </div>
 
         </div>
     </main>

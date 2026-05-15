@@ -30,6 +30,12 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeProductCards();
     initializeNewsletterForm();
     initializeHeaderScroll();
+    initializeDetailTabs();
+    initializeRevealAnimations();
+    initializeDetailGallery();
+    initializeCarousels();
+    initializeHeroParallax();
+    initializeAudioWaveform();
 });
 
 /* ===================================
@@ -107,6 +113,273 @@ function toggleFavorite(productId, btn) {
 function loadFavoritesFromServer() {
     // Sayfada PHP tarafından gelen favori listesi var mı kontrol et
     // şimdilik bu boş - ama daha sonra sunucudan gelecek
+}
+
+/* ===================================
+   DETAIL PAGE - TABS
+=================================== */
+
+function initializeDetailTabs() {
+    const tabButtons = document.querySelectorAll('.detail-tab');
+    const panels = document.querySelectorAll('.detail-panel');
+    if (!tabButtons.length || !panels.length) return;
+
+    tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = btn.getAttribute('data-tab');
+            if (!target) return;
+
+            tabButtons.forEach(other => other.classList.remove('active'));
+            btn.classList.add('active');
+
+            panels.forEach(panel => {
+                panel.classList.toggle('active', panel.id === `tab-${target}`);
+            });
+        });
+    });
+}
+
+/* ===================================
+   REVEAL ANIMATIONS
+=================================== */
+
+function initializeRevealAnimations() {
+    const revealItems = document.querySelectorAll('.reveal');
+    if (!revealItems.length) return;
+
+    if (!('IntersectionObserver' in window)) {
+        revealItems.forEach(item => item.classList.add('is-visible'));
+        return;
+    }
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.2 });
+
+    revealItems.forEach(item => observer.observe(item));
+}
+
+/* ===================================
+   DETAIL PAGE - GALLERY
+=================================== */
+
+function initializeDetailGallery() {
+    const mainImage = document.getElementById('detail-main-image');
+    const thumbs = document.querySelectorAll('.detail-thumb');
+    const lightbox = document.getElementById('detail-lightbox');
+    const lightboxImage = document.getElementById('detail-lightbox-image');
+    const closeBtn = document.querySelector('.detail-lightbox-close');
+    const zoomBtn = document.querySelector('.detail-zoom-btn');
+
+    if (!mainImage) return;
+
+    function updateActiveThumb(activeBtn) {
+        thumbs.forEach(btn => btn.classList.remove('is-active'));
+        if (activeBtn) activeBtn.classList.add('is-active');
+    }
+
+    thumbs.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const src = btn.getAttribute('data-src');
+            if (!src) return;
+            mainImage.src = src;
+            updateActiveThumb(btn);
+        });
+    });
+
+    function openLightbox() {
+        if (!lightbox || !lightboxImage) return;
+        lightboxImage.src = mainImage.src;
+        lightboxImage.alt = mainImage.alt || 'Kapak gorseli';
+        lightbox.classList.add('is-open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('no-scroll');
+    }
+
+    function closeLightbox() {
+        if (!lightbox) return;
+        lightbox.classList.remove('is-open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('no-scroll');
+    }
+
+    if (zoomBtn) zoomBtn.addEventListener('click', openLightbox);
+    mainImage.addEventListener('click', openLightbox);
+
+    if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
+    if (lightbox) {
+        lightbox.addEventListener('click', (event) => {
+            if (event.target === lightbox) closeLightbox();
+        });
+    }
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeLightbox();
+    });
+}
+
+/* ===================================
+   CAROUSEL
+=================================== */
+
+function initializeCarousels() {
+    const carousel = document.querySelector('[data-carousel]');
+    const prevBtn = document.querySelector('[data-carousel-prev]');
+    const nextBtn = document.querySelector('[data-carousel-next]');
+
+    if (!carousel || !prevBtn || !nextBtn) return;
+
+    const track = carousel.querySelector('.carousel-track');
+    if (!track) return;
+
+    function scrollByAmount(direction) {
+        const card = track.querySelector('.product-card');
+        const cardWidth = card ? card.offsetWidth : 240;
+        const gap = 18;
+        const amount = (cardWidth + gap) * 2;
+        track.scrollBy({ left: direction * amount, behavior: 'smooth' });
+    }
+
+    prevBtn.addEventListener('click', () => scrollByAmount(-1));
+    nextBtn.addEventListener('click', () => scrollByAmount(1));
+
+    let autoTimer = null;
+    const autoDelay = 4500;
+
+    function startAuto() {
+        if (autoTimer) return;
+        autoTimer = setInterval(() => scrollByAmount(1), autoDelay);
+    }
+
+    function stopAuto() {
+        if (!autoTimer) return;
+        clearInterval(autoTimer);
+        autoTimer = null;
+    }
+
+    carousel.addEventListener('mouseenter', stopAuto);
+    carousel.addEventListener('mouseleave', startAuto);
+    carousel.addEventListener('focusin', stopAuto);
+    carousel.addEventListener('focusout', startAuto);
+
+    startAuto();
+}
+
+/* ===================================
+   HERO PARALLAX
+=================================== */
+
+function initializeHeroParallax() {
+    const hero = document.querySelector('.hero-visual');
+    if (!hero) return;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (reduceMotion.matches) return;
+
+    const layers = hero.querySelectorAll('[data-parallax]');
+    if (!layers.length) return;
+
+    let rafId = null;
+    let targetX = 0;
+    let targetY = 0;
+
+    function update() {
+        layers.forEach(layer => {
+            const depth = parseFloat(layer.getAttribute('data-parallax')) || 0;
+            const moveX = (targetX * depth) / 100;
+            const moveY = (targetY * depth) / 100;
+            layer.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
+        });
+        rafId = null;
+    }
+
+    function requestUpdate() {
+        if (rafId) return;
+        rafId = requestAnimationFrame(update);
+    }
+
+    hero.addEventListener('mousemove', (event) => {
+        const rect = hero.getBoundingClientRect();
+        const relX = (event.clientX - rect.left) / rect.width - 0.5;
+        const relY = (event.clientY - rect.top) / rect.height - 0.5;
+        targetX = relX * 40;
+        targetY = relY * 40;
+        requestUpdate();
+    });
+
+    hero.addEventListener('mouseleave', () => {
+        targetX = 0;
+        targetY = 0;
+        requestUpdate();
+    });
+}
+
+/* ===================================
+   AUDIO WAVEFORM
+=================================== */
+
+function initializeAudioWaveform() {
+    const audio = document.querySelector('.detail-audio');
+    const wave = document.querySelector('.audio-wave');
+    if (!audio || !wave) return;
+
+    const bars = Array.from(wave.querySelectorAll('span'));
+    if (!bars.length) return;
+
+    let audioContext;
+    let analyser;
+    let dataArray;
+    let source;
+    let rafId;
+
+    function setup() {
+        try {
+            audio.crossOrigin = 'anonymous';
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 128;
+            dataArray = new Uint8Array(analyser.frequencyBinCount);
+            source = audioContext.createMediaElementSource(audio);
+            source.connect(analyser);
+            analyser.connect(audioContext.destination);
+            wave.classList.add('is-live');
+        } catch (error) {
+            return;
+        }
+    }
+
+    function render() {
+        if (!analyser) return;
+        analyser.getByteFrequencyData(dataArray);
+        bars.forEach((bar, index) => {
+            const slice = dataArray[index % dataArray.length] || 0;
+            const height = Math.max(8, Math.min(100, (slice / 255) * 100));
+            bar.style.height = `${height}%`;
+        });
+        rafId = requestAnimationFrame(render);
+    }
+
+    audio.addEventListener('play', () => {
+        if (!audioContext) setup();
+        if (audioContext && audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+        cancelAnimationFrame(rafId);
+        render();
+    });
+
+    audio.addEventListener('pause', () => {
+        cancelAnimationFrame(rafId);
+    });
+
+    audio.addEventListener('ended', () => {
+        cancelAnimationFrame(rafId);
+    });
 }
 
 /* ===================================
@@ -489,13 +762,29 @@ function smoothScrollToProducts() {
 function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
-    notification.textContent = message;
+
+    // Add spinning vinyl icon for cart success messages if message contains 'Sepet'
+    let iconHtml = '';
+    if (type === 'success' && message.toLowerCase().includes('sepet')) {
+        iconHtml = `<svg class="spinning-vinyl-icon" viewBox="0 0 24 24" width="20" height="20" style="margin-right: 10px; vertical-align: middle; fill: white;">
+            <circle cx="12" cy="12" r="10" stroke="white" stroke-width="1" fill="#222"/>
+            <circle cx="12" cy="12" r="4" fill="#ad3107"/>
+            <circle cx="12" cy="12" r="1" fill="white"/>
+            <path d="M12 2 a10 10 0 0 1 10 10" stroke="#444" stroke-width="1" fill="none"/>
+        </svg>`;
+    } else if (type === 'success') {
+        iconHtml = '<span style="margin-right: 10px;">✅</span>';
+    } else if (type === 'error') {
+        iconHtml = '<span style="margin-right: 10px;">❌</span>';
+    }
+
+    notification.innerHTML = `${iconHtml}<span style="vertical-align: middle;">${message}</span>`;
 
     const bgColor = type === 'success' ? '#ad3107' : type === 'error' ? '#ef4444' : '#3b82f6';
 
     notification.style.cssText = `
         position: fixed;
-        top: 20px;
+        bottom: 20px;
         right: 20px;
         padding: 15px 20px;
         background: ${bgColor};
@@ -505,6 +794,8 @@ function showNotification(message, type = 'info') {
         animation: slideIn 0.3s ease-out;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         font-weight: 500;
+        display: flex;
+        align-items: center;
     `;
 
     document.body.appendChild(notification);

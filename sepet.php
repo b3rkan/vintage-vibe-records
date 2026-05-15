@@ -74,19 +74,20 @@ if (!isset($_SESSION['sepet'])) {
 
             <!-- CART SECTION -->
             <section class="admin-liste-alani">
-                <h2 style="text-align: center; color: var(--primary-gold); margin-bottom: 30px;">🛒 Alışveriş Sepetiniz</h2>
+                <h2 class="cart-title">🛒 Alışveriş Sepetiniz</h2>
 
                 <?php
                 if (!isset($_SESSION['sepet']) || empty($_SESSION['sepet'])) {
-                    echo "<div style='text-align: center; padding: 60px 20px;'>";
-                    echo "  <p style='font-size: 1.2em; color: var(--text-muted); margin-bottom: 30px;'>Sepetinizde şu an hiç plak bulunmuyor</p>";
-                    echo "  <a href='index.php' class='btn-guncelle' style='padding: 12px 30px; font-size: 1.1em;'>← Kataloğa Dön</a>";
+                    echo "<div class='cart-empty'>";
+                    echo "  <p>Sepetinizde şu an hiç plak bulunmuyor</p>";
+                    echo "  <a href='index.php' class='btn-guncelle'>← Kataloğa Dön</a>";
                     echo "</div>";
                 } else {
                     $_SESSION['sepet'] = vvr_normalize_cart_items($_SESSION['sepet']);
                     $genel_toplam = 0;
 
-                    echo "<table class='admin-tablo' style='width: 100%;'>";
+                    echo "<div class='table-scroll'>";
+                    echo "<table class='admin-tablo cart-table'>";
                     echo "<thead><tr>";
                     echo "  <th>Albüm / Sanatçı</th>";
                     echo "  <th style='width: 80px; text-align: center;'>Adet</th>";
@@ -126,14 +127,15 @@ if (!isset($_SESSION['sepet'])) {
                     }
 
                     echo "</tbody></table>";
+                    echo "</div>";
 
                     // Toplam ve Ödeme
                     $genel_format = number_format($genel_toplam, 2, ',', '.');
-                    echo "<div style='text-align: right; margin-top: 40px; padding: 20px; background: var(--surface-light); border-radius: 8px;'>";
-                    echo "  <p style='font-size: 1.5em; margin-bottom: 20px;'>";
-                    echo "    Genel Toplam: <span style='color: var(--primary-gold); font-weight: 700; font-size: 1.3em;'>$genel_format ₺</span>";
+                    echo "<div class='cart-summary'>";
+                    echo "  <p class='cart-summary-total'>";
+                    echo "    Genel Toplam: <span>$genel_format ₺</span>";
                     echo "  </p>";
-                    echo "  <button class='sepete-ekle-btn' onclick=\"alert('Tebrikler! Siparişiniz başarıyla alındı.\\n\\nNot: Bu bir okul projesi simülasyonudur.');\" style='font-size: 1.1em; padding: 15px 40px;'>💳 Siparişi Tamamla (Ödeme)</button>";
+                    echo "  <button class='sepete-ekle-btn cart-checkout-btn' onclick=\"alert('Tebrikler! Siparişiniz başarıyla alındı.\\n\\nNot: Bu bir okul projesi simülasyonudur.');\">💳 Siparişi Tamamla (Ödeme)</button>";
                     echo "</div>";
                 }
                 ?>

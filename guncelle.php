@@ -29,6 +29,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sanatci = trim($_POST['sanatci'] ?? '');
     $format = trim($_POST['format'] ?? '');
     $firma = trim($_POST['firma'] ?? '');
+    $label = trim($_POST['label'] ?? '');
+    $edition = trim($_POST['edition'] ?? '');
+    $catalog_no = trim($_POST['catalog_no'] ?? '');
+    $rpm = trim($_POST['rpm'] ?? '');
+    $vinyl_weight = trim($_POST['vinyl_weight'] ?? '');
+    $color_variant = trim($_POST['color_variant'] ?? '');
+    $aciklama = trim($_POST['aciklama'] ?? '');
+    $tracklist = trim($_POST['tracklist'] ?? '');
+    $audio_preview_url = trim($_POST['audio_preview_url'] ?? '');
+    $gallery_images = trim($_POST['gallery_images'] ?? '');
     $fiyat = (float)($_POST['fiyat'] ?? 0);
     $stok = (int)($_POST['stok'] ?? 0);
     $kategori_id = (int)($_POST['kategori_id'] ?? 0);
@@ -53,8 +63,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     ) {
         $hata = 'Lütfen tüm alanları doğru biçimde doldurun.';
     } else {
-        $guncelle = $db->prepare("UPDATE plaklar SET baslik = ?, sanatci = ?, format = ?, firma = ?, fiyat = ?, stok = ?, kategori_id = ?, baski_turu = ?, kondisyon_kapak = ?, kondisyon_plak = ? WHERE id = ?");
-        $guncelle->execute([$baslik, $sanatci, $format, $firma, $fiyat, $stok, $kategori_id, $baski_turu, $kondisyon_kapak, $kondisyon_plak, $id]);
+        $guncelle = $db->prepare("UPDATE plaklar SET baslik = ?, sanatci = ?, format = ?, firma = ?, label = ?, edition = ?, catalog_no = ?, rpm = ?, vinyl_weight = ?, color_variant = ?, aciklama = ?, tracklist = ?, audio_preview_url = ?, gallery_images = ?, fiyat = ?, stok = ?, kategori_id = ?, baski_turu = ?, kondisyon_kapak = ?, kondisyon_plak = ? WHERE id = ?");
+        $guncelle->execute([
+            $baslik,
+            $sanatci,
+            $format,
+            $firma,
+            $label,
+            $edition,
+            $catalog_no,
+            $rpm,
+            $vinyl_weight,
+            $color_variant,
+            $aciklama,
+            $tracklist,
+            $audio_preview_url,
+            $gallery_images,
+            $fiyat,
+            $stok,
+            $kategori_id,
+            $baski_turu,
+            $kondisyon_kapak,
+            $kondisyon_plak,
+            $id
+        ]);
 
         header("Location: admin.php?mesaj=guncellendi");
         exit;
@@ -175,6 +207,36 @@ $kategoriler = $kat_sorgu->fetchAll(PDO::FETCH_ASSOC);
             </div>
 
             <div class="form-grup">
+                <label>Label (Opsiyonel)</label>
+                <input type="text" name="label" value="<?php echo htmlspecialchars($plak['label'] ?? ''); ?>">
+            </div>
+
+            <div class="form-grup">
+                <label>Edition (Opsiyonel)</label>
+                <input type="text" name="edition" value="<?php echo htmlspecialchars($plak['edition'] ?? ''); ?>">
+            </div>
+
+            <div class="form-grup">
+                <label>Catalog No (Opsiyonel)</label>
+                <input type="text" name="catalog_no" value="<?php echo htmlspecialchars($plak['catalog_no'] ?? ''); ?>">
+            </div>
+
+            <div class="form-grup">
+                <label>RPM (Opsiyonel)</label>
+                <input type="text" name="rpm" value="<?php echo htmlspecialchars($plak['rpm'] ?? ''); ?>">
+            </div>
+
+            <div class="form-grup">
+                <label>Vinyl Weight (Opsiyonel)</label>
+                <input type="text" name="vinyl_weight" value="<?php echo htmlspecialchars($plak['vinyl_weight'] ?? ''); ?>">
+            </div>
+
+            <div class="form-grup">
+                <label>Color Variant (Opsiyonel)</label>
+                <input type="text" name="color_variant" value="<?php echo htmlspecialchars($plak['color_variant'] ?? ''); ?>">
+            </div>
+
+            <div class="form-grup">
                 <label>Kategori</label>
                 <select name="kategori_id" required>
                     <?php foreach ($kategoriler as $kat): ?>
@@ -219,6 +281,26 @@ $kategoriler = $kat_sorgu->fetchAll(PDO::FETCH_ASSOC);
             <div class="form-grup">
                 <label>Stok Adedi</label>
                 <input type="number" name="stok" value="<?php echo $plak['stok']; ?>" required>
+            </div>
+
+            <div class="form-grup">
+                <label>Aciklama (Opsiyonel)</label>
+                <textarea name="aciklama" rows="4" style="width: 100%;"><?php echo htmlspecialchars($plak['aciklama'] ?? ''); ?></textarea>
+            </div>
+
+            <div class="form-grup">
+                <label>Tracklist (Opsiyonel)</label>
+                <textarea name="tracklist" rows="5" style="width: 100%;"><?php echo htmlspecialchars($plak['tracklist'] ?? ''); ?></textarea>
+            </div>
+
+            <div class="form-grup">
+                <label>Audio Preview URL (Opsiyonel)</label>
+                <input type="url" name="audio_preview_url" value="<?php echo htmlspecialchars($plak['audio_preview_url'] ?? ''); ?>">
+            </div>
+
+            <div class="form-grup">
+                <label>Gallery Images (Opsiyonel)</label>
+                <textarea name="gallery_images" rows="3" style="width: 100%;"><?php echo htmlspecialchars($plak['gallery_images'] ?? ''); ?></textarea>
             </div>
 
             <button type="submit" class="btn-kaydet">Değişiklikleri Kaydet</button>

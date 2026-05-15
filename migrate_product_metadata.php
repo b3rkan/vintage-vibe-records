@@ -27,6 +27,16 @@ echo "==========================================\n";
 try {
     vvr_add_column_if_missing($db, 'plaklar', 'format', "VARCHAR(50) NULL AFTER `sanatci`");
     vvr_add_column_if_missing($db, 'plaklar', 'firma', "VARCHAR(100) NULL AFTER `format`");
+    vvr_add_column_if_missing($db, 'plaklar', 'label', "VARCHAR(100) NULL AFTER `firma`");
+    vvr_add_column_if_missing($db, 'plaklar', 'edition', "VARCHAR(60) NULL AFTER `label`");
+    vvr_add_column_if_missing($db, 'plaklar', 'catalog_no', "VARCHAR(50) NULL AFTER `edition`");
+    vvr_add_column_if_missing($db, 'plaklar', 'rpm', "VARCHAR(20) NULL AFTER `catalog_no`");
+    vvr_add_column_if_missing($db, 'plaklar', 'vinyl_weight', "VARCHAR(20) NULL AFTER `rpm`");
+    vvr_add_column_if_missing($db, 'plaklar', 'color_variant', "VARCHAR(40) NULL AFTER `vinyl_weight`");
+    vvr_add_column_if_missing($db, 'plaklar', 'aciklama', "TEXT NULL AFTER `color_variant`");
+    vvr_add_column_if_missing($db, 'plaklar', 'tracklist', "TEXT NULL AFTER `aciklama`");
+    vvr_add_column_if_missing($db, 'plaklar', 'audio_preview_url', "VARCHAR(255) NULL AFTER `tracklist`");
+    vvr_add_column_if_missing($db, 'plaklar', 'gallery_images', "TEXT NULL AFTER `audio_preview_url`");
     vvr_add_column_if_missing($db, 'plaklar', 'kondisyon_kapak', "VARCHAR(20) NULL AFTER `baski_turu`");
     vvr_add_column_if_missing($db, 'plaklar', 'kondisyon_plak', "VARCHAR(20) NULL AFTER `kondisyon_kapak`");
     echo "\nMigration tamamlandı.\n";

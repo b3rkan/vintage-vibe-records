@@ -63,6 +63,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sanatci = trim($_POST['sanatci'] ?? '');
     $format = trim($_POST['format'] ?? '');
     $firma = trim($_POST['firma'] ?? '');
+    $label = trim($_POST['label'] ?? '');
+    $edition = trim($_POST['edition'] ?? '');
+    $catalog_no = trim($_POST['catalog_no'] ?? '');
+    $rpm = trim($_POST['rpm'] ?? '');
+    $vinyl_weight = trim($_POST['vinyl_weight'] ?? '');
+    $color_variant = trim($_POST['color_variant'] ?? '');
+    $aciklama = trim($_POST['aciklama'] ?? '');
+    $tracklist = trim($_POST['tracklist'] ?? '');
+    $audio_preview_url = trim($_POST['audio_preview_url'] ?? '');
+    $gallery_images = trim($_POST['gallery_images'] ?? '');
     $cikis_yili = (int)($_POST['cikis_yili'] ?? 0);
     $kategori_id = (int)($_POST['kategori_id'] ?? 0);
     $fiyat = (float)($_POST['fiyat'] ?? 0);
@@ -90,8 +100,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $toastTip = 'error';
     } else {
         // SQL Injection'ı önlemek için PDO prepare metodunu kullanıyoruz
-        $sorgu = $db->prepare("INSERT INTO plaklar (baslik, sanatci, format, firma, cikis_yili, kategori_id, fiyat, baski_turu, kondisyon_kapak, kondisyon_plak) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $ekle = $sorgu->execute([$baslik, $sanatci, $format, $firma, $cikis_yili, $kategori_id, $fiyat, $baski_turu, $kondisyon_kapak, $kondisyon_plak]);
+        $sorgu = $db->prepare("INSERT INTO plaklar (baslik, sanatci, format, firma, label, edition, catalog_no, rpm, vinyl_weight, color_variant, aciklama, tracklist, audio_preview_url, gallery_images, cikis_yili, kategori_id, fiyat, baski_turu, kondisyon_kapak, kondisyon_plak) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $ekle = $sorgu->execute([
+            $baslik,
+            $sanatci,
+            $format,
+            $firma,
+            $label,
+            $edition,
+            $catalog_no,
+            $rpm,
+            $vinyl_weight,
+            $color_variant,
+            $aciklama,
+            $tracklist,
+            $audio_preview_url,
+            $gallery_images,
+            $cikis_yili,
+            $kategori_id,
+            $fiyat,
+            $baski_turu,
+            $kondisyon_kapak,
+            $kondisyon_plak
+        ]);
 
         if ($ekle) {
             header('Location: admin.php?mesaj=eklendi');
@@ -377,6 +408,36 @@ $tum_plaklar = $plak_sorgu->fetchAll(PDO::FETCH_ASSOC);
                         </div>
 
                         <div class="form-grup">
+                            <label for="label">Plak Şirketi (Opsiyonel):</label>
+                            <input type="text" id="label" name="label" placeholder="Blue Note, Verve...">
+                        </div>
+
+                        <div class="form-grup">
+                            <label for="edition">Baskı Versiyonu (Opsiyonel):</label>
+                            <input type="text" id="edition" name="edition" placeholder="İlk Baskı, Yeni Basım...">
+                        </div>
+
+                        <div class="form-grup">
+                            <label for="catalog_no">Katalog No (Opsiyonel):</label>
+                            <input type="text" id="catalog_no" name="catalog_no" placeholder="BN-1595">
+                        </div>
+
+                        <div class="form-grup">
+                            <label for="rpm">Devir (RPM) (Opsiyonel):</label>
+                            <input type="text" id="rpm" name="rpm" placeholder="33 1/3, 45">
+                        </div>
+
+                        <div class="form-grup">
+                            <label for="vinyl_weight">Plak Ağırlığı (Opsiyonel):</label>
+                            <input type="text" id="vinyl_weight" name="vinyl_weight" placeholder="180g">
+                        </div>
+
+                        <div class="form-grup">
+                            <label for="color_variant">Renk Varyantı (Opsiyonel):</label>
+                            <input type="text" id="color_variant" name="color_variant" placeholder="Mat Kırmızı">
+                        </div>
+
+                        <div class="form-grup">
                             <label for="cikis_yili">Çıkış Yılı:</label>
                             <input type="number" id="cikis_yili" name="cikis_yili" min="1900" max="2026" required>
                         </div>
@@ -428,6 +489,26 @@ $tum_plaklar = $plak_sorgu->fetchAll(PDO::FETCH_ASSOC);
                         <div class="form-grup">
                             <label for="fiyat">Fiyat (TL):</label>
                             <input type="number" step="0.01" id="fiyat" name="fiyat" required>
+                        </div>
+
+                        <div class="form-grup full">
+                            <label for="aciklama">Aciklama (Opsiyonel):</label>
+                            <textarea id="aciklama" name="aciklama" rows="4" placeholder="Album hakkinda kisa aciklama..."></textarea>
+                        </div>
+
+                        <div class="form-grup full">
+                            <label for="tracklist">Parça Listesi (Opsiyonel):</label>
+                            <textarea id="tracklist" name="tracklist" rows="5" placeholder="A1 - ...&#10;A2 - ...&#10;B1 - ..."></textarea>
+                        </div>
+
+                        <div class="form-grup full">
+                            <label for="audio_preview_url">Ses Önizleme URL (Opsiyonel):</label>
+                            <input type="url" id="audio_preview_url" name="audio_preview_url" placeholder="https://...">
+                        </div>
+
+                        <div class="form-grup full">
+                            <label for="gallery_images">Galeri Görselleri (Opsiyonel):</label>
+                            <textarea id="gallery_images" name="gallery_images" rows="3" placeholder="images/kapak1.jpg, images/kapak2.jpg"></textarea>
                         </div>
 
                         <button type="submit" class="gonder-btn full">Kataloğa Ekle</button>
